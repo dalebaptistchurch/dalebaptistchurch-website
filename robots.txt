@@ -1,5 +1,0 @@
-# robots.txt for dalebaptistchurch.org
-User-agent: *
-Allow: /
-
-Sitemap: https://www.dalebaptistchurch.org/sitemap.xml
