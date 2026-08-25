@@ -906,4 +906,28 @@
         <li><a href="connect.html">Youth Forum — 5:00 PM Wed</a></li>
       </ul>
     </div>
-  <
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Dale Baptist Church &middot; 300 2nd Ave, Dale, OK 74851</p>
+  </div>
+</footer>
+
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  // Close menu when a link is clicked
+  mobileMenu.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
