@@ -688,7 +688,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>&copy; 2025 Dale Baptist Church &middot; 300 2nd Ave, Dale, OK 74851</p>
+    <p>&copy; <span class="copyright-year">2026</span> Dale Baptist Church &middot; 300 2nd Ave, Dale, OK 74851</p>
   </div>
 </footer>
 
@@ -709,5 +709,11 @@
   });
 </script>
 
+
+<script>
+document.querySelectorAll('.copyright-year').forEach(function(element) {
+  element.textContent = new Date().getFullYear();
+});
+</script>
 </body>
 </html>
