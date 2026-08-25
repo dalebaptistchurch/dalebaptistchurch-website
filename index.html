@@ -4,6 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dale Baptist Church — Dale, Oklahoma</title>
+<meta name="description" content="Dale Baptist Church is a welcoming Baptist congregation in Dale, Oklahoma. Sunday School at 9:45 and Worship at 11:00. Come worship with us." />
+<link rel="canonical" href="https://www.dalebaptistchurch.org/" />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="https://www.dalebaptistchurch.org/" />
+<meta property="og:title"       content="Dale Baptist Church — Dale, Oklahoma" />
+<meta property="og:description" content="Dale Baptist Church is a welcoming Baptist congregation in Dale, Oklahoma. Sunday School at 9:45 and Worship at 11:00. Come worship with us." />
+<meta property="og:image"       content="https://www.dalebaptistchurch.org/images/og-image.jpg" />
+<meta property="og:locale"      content="en_US" />
+<meta property="og:site_name"   content="Dale Baptist Church" />
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content="Dale Baptist Church — Dale, Oklahoma" />
+<meta name="twitter:description" content="Dale Baptist Church is a welcoming Baptist congregation in Dale, Oklahoma. Sunday School at 9:45 and Worship at 11:00. Come worship with us." />
+<meta name="twitter:image"       content="https://www.dalebaptistchurch.org/images/og-image.jpg" />
+<link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -194,7 +209,7 @@
   .time-sub {
     font-size: 0.6rem; font-weight: 500;
     letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.55);
   }
   @media (min-width: 769px) {
     .times-strip { grid-template-columns: repeat(4, 1fr); }
@@ -481,7 +496,7 @@
   .footer-logo { margin-bottom: 20px; }
   .footer-logo img { height: 40px; width: auto; display: block; }
   .footer-tagline {
-    font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    font-size: 0.8rem; color: rgba(255,255,255,0.65);
     line-height: 1.7; margin-bottom: 32px; max-width: 320px;
   }
   .footer-links {
@@ -501,7 +516,7 @@
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 4px; display: flex;
     align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.4); text-decoration: none;
+    color: rgba(255,255,255,0.65); text-decoration: none;
     font-size: 0.75rem; font-weight: 700;
     transition: border-color 0.2s, color 0.2s;
   }
@@ -516,9 +531,28 @@
     footer { padding: 60px 48px 40px; display: grid; grid-template-columns: 2fr 1fr; gap: 48px; }
     .footer-bottom { grid-column: span 2; }
   }
+
+  /* ── SKIP LINK ── */
+  .skip-link {
+    position: absolute; left: -9999px; top: 8px;
+    background: var(--black); color: var(--white);
+    padding: 8px 16px; z-index: 9999;
+    border-radius: 4px;
+    font-size: 0.82rem; font-weight: 700;
+    text-decoration: none;
+  }
+  .skip-link:focus { left: 16px; }
+
+  /* ── KEYBOARD FOCUS ── */
+  :focus-visible {
+    outline: 3px solid #dc2626;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <!-- NAV -->
 <nav>
@@ -532,13 +566,13 @@
     <li><a href="events.html">Events</a></li>
     <li><a href="#events" class="nav-cta">Join Us!</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button">
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button" aria-expanded="false" aria-controls="mobileMenu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation menu">
+<div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation" aria-hidden="true">
   <a href="index.html">Home</a>
   <a href="about.html">About</a>
   <a href="sermons.html">Sermons</a>
@@ -546,6 +580,7 @@
   <a href="events.html">Events</a>
   <a href="#events" class="mob-cta">Join Us!</a>
 </div>
+<main id="main-content">
 
 <!-- HERO -->
 <section class="hero">
@@ -595,7 +630,7 @@
         <div class="slide-body">
           <span class="slide-tag tag-all">Every Week</span>
           <p class="slide-date">Join Us Anytime</p>
-          <h3 class="slide-title">Weekly Services</h3>
+          <h2 class="slide-title">Weekly Services</h2>
           <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
             <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e5e5e5;">
               <span style="font-size:0.82rem; font-weight:600; color:#333;">Sunday School</span>
@@ -618,50 +653,26 @@
         </div>
       </div>
 
-      <!-- SLIDE 1: Falls Creek -->
-      <div class="carousel-slide" data-expires="2026-06-27">
-        <div class="slide-img" style="background-image:url('images/falls-creek-2026.webp'); height:200px; background-size:cover; background-position:center;"></div>
-        <div class="slide-body">
-          <span class="slide-tag tag-youth">Youth</span>
-          <p class="slide-date">June 22–27, 2026</p>
-          <h3 class="slide-title">Falls Creek 2026</h3>
-          <p class="slide-desc">This year's theme: The Greatest. Don't miss registration!</p>
-          <a href="events.html" class="slide-link">Registration Info</a>
-        </div>
-      </div>
-
-      <!-- SLIDE 2: Women's Retreat -->
-      <div class="carousel-slide" data-expires="2026-04-18">
-        <div class="slide-img" style="background-image:url('images/womens-retreat-2026.webp'); height:200px; background-size:cover; background-position:center;"></div>
-        <div class="slide-body">
-          <span class="slide-tag tag-women">Women</span>
-          <p class="slide-date">April 17–18, 2026</p>
-          <h3 class="slide-title">Women's Retreat 2026</h3>
-          <p class="slide-desc">Draw Near — Falls Creek Conference Centers, Davis, OK.</p>
-          <a href="events.html" class="slide-link">Learn More</a>
-        </div>
-      </div>
-
-      <!-- SLIDE 3: Men's Prayer Breakfast -->
-      <div class="carousel-slide" data-expires="2026-05-02">
+      <!-- SLIDE 1: Men's Prayer Breakfast -->
+      <div class="carousel-slide" data-expires="2026-09-13">
         <div class="slide-img" style="background-image:url('images/mens-prayer-breakfast.webp'); height:200px; background-size:cover; background-position:center;"></div>
         <div class="slide-body">
           <span class="slide-tag tag-men">Men</span>
-          <p class="slide-date">Saturday, May 2, 2026</p>
-          <h3 class="slide-title">Men's Prayer Breakfast</h3>
-          <p class="slide-desc">Breakfast, fellowship, and prayer. All men welcome!</p>
+          <p class="slide-date">Saturday, September 12, 2026</p>
+          <h2 class="slide-title">Men's Prayer Breakfast</h2>
+          <p class="slide-desc">Breakfast, fellowship, and prayer. All men welcome! Held every other month.</p>
           <a href="events.html" class="slide-link">Learn More</a>
         </div>
       </div>
 
-      <!-- SLIDE 4: VBS -->
-      <div class="carousel-slide" data-expires="2026-08-31">
-        <div class="slide-img" style="background-image:url('https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600&q=80'); height:200px; background-size:cover; background-position:center;"></div>
+      <!-- SLIDE 2: Non-Traditional Thanksgiving Lunch -->
+      <div class="carousel-slide" data-expires="2026-11-23">
+        <div class="slide-img" style="background-image:url('images/church-exterior.webp'); height:200px; background-size:cover; background-position:center;"></div>
         <div class="slide-body">
-          <span class="slide-tag tag-all">All Ages</span>
-          <p class="slide-date">Summer 2026 — Details Coming Soon</p>
-          <h3 class="slide-title">Vacation Bible School</h3>
-          <p class="slide-desc">One of our favorite weeks of the year. Open to all children in the community.</p>
+          <span class="slide-tag tag-church">Church Family</span>
+          <p class="slide-date">Sunday, November 22, 2026</p>
+          <h2 class="slide-title">Non-Traditional Thanksgiving Lunch</h2>
+          <p class="slide-desc">Skip the turkey — we do Thanksgiving our own way! Everyone is welcome.</p>
           <a href="events.html" class="slide-link">Learn More</a>
         </div>
       </div>
@@ -695,37 +706,19 @@
 <!-- SERMONS -->
 <section class="sermons-section">
   <div class="section-header">
-    <span class="section-label">Recent Messages</span>
+    <span class="section-label">Sunday Sermons</span>
     <a href="sermons.html" class="section-see-all">See All</a>
   </div>
-  <!-- UPDATE WEEKLY: Add new sermon at top, remove oldest -->
   <div class="sermon-list">
-    <a href="https://youtu.be/HOV5SZyWMFg" target="_blank" class="sermon-row">
-      <div class="sermon-play"></div>
-      <div class="sermon-info">
-        <p class="sermon-date">April 5, 2025</p>
-        <p class="sermon-title">Easter Sunday Sermon</p>
-      </div>
-      <span class="sermon-arrow">›</span>
-    </a>
-    <a href="https://youtu.be/1pTkG7XvioY" target="_blank" class="sermon-row">
-      <div class="sermon-play"></div>
-      <div class="sermon-info">
-        <p class="sermon-date">March 29, 2025</p>
-        <p class="sermon-title">March 29 Sermon</p>
-      </div>
-      <span class="sermon-arrow">›</span>
-    </a>
-    <a href="https://youtu.be/2wIbQcsL2_w" target="_blank" class="sermon-row">
-      <div class="sermon-play"></div>
-      <div class="sermon-info">
-        <p class="sermon-date">March 22, 2025</p>
-        <p class="sermon-title">March 22 Sermon</p>
-      </div>
-      <span class="sermon-arrow">›</span>
-    </a>
+    <div style="padding:24px 20px; text-align:center;">
+      <p style="font-size:0.92rem; color:var(--gray-dark); line-height:1.75; margin-bottom:20px;">
+        Watch our latest Sunday messages through the Dale Baptist Church sermons playlist.
+      </p>
+      <a href="sermons.html" style="display:inline-block; background:var(--black); color:var(--white); padding:12px 28px; border-radius:4px; font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; transition:opacity 0.2s;">View Sermons</a>
+    </div>
   </div>
 </section>
+
 
 <!-- CONNECT -->
 <section class="connect-section">
@@ -760,24 +753,25 @@
   <div style="display:flex; flex-direction:column; gap:16px; margin-top:40px;">
     <div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:24px; border:1px solid rgba(255,255,255,0.08);">
       <p style="font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gray-light); margin-bottom:16px;">Give Online</p>
-      <a href="https://www.zeffy.com/en-US/donation-form/tithing-5" target="_blank" class="btn-white-outline">Contribute</a>
+      <a href="https://www.zeffy.com/en-US/donation-form/tithing-5" target="_blank" class="btn-white-outline" rel="noopener noreferrer">Contribute</a>
     </div>
     <div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:24px; border:1px solid rgba(255,255,255,0.08);">
       <p style="font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gray-light); margin-bottom:16px; text-align:center;">Follow Us</p>
       <div style="display:flex; gap:16px; justify-content:center;">
-        <a href="https://www.facebook.com/groups/2354953164804602/" target="_blank" style="color:rgba(255,255,255,0.6); text-decoration:none; font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:2px;">Facebook</a>
-        <a href="https://www.instagram.com/daleyouthgroup" target="_blank" style="color:rgba(255,255,255,0.6); text-decoration:none; font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:2px;">Instagram</a>
+        <a href="https://www.facebook.com/groups/2354953164804602/" target="_blank" rel="noopener noreferrer" aria-label="Dale Baptist Church on Facebook" style="color:rgba(255,255,255,0.6); text-decoration:none; font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:2px;">Facebook</a>
+        <a href="https://www.instagram.com/daleyouthgroup" target="_blank" rel="noopener noreferrer" aria-label="Dale Youth Group on Instagram" style="color:rgba(255,255,255,0.6); text-decoration:none; font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:2px;">Instagram</a>
       </div>
     </div>
   </div>
 </section>
 
+</main>
 <!-- FOOTER -->
 <footer>
   <div>
     <div style="margin-bottom:20px;">
       <p style="font-size:1.1rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--white);">Dale Baptist Church</p>
-      <p style="font-size:0.6rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-top:4px;">Dale, Oklahoma</p>
+      <p style="font-size:0.6rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-top:4px;">Dale, Oklahoma</p>
     </div>
     <p class="footer-tagline">Proclaiming the gospel of Jesus Christ and welcoming all people — in Dale, Oklahoma and beyond.</p>
     <div class="footer-links">
@@ -795,17 +789,18 @@
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Sunday School — 9:45 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Worship — 11:00 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Youth Forum — Wed 5:00 PM</p>
+      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid&#8217;s Korner — Wed 5:00 PM</p>
     </div>
 
     <div style="margin-top:28px;">
       <p style="font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:14px;">Give Online</p>
-      <a href="https://www.zeffy.com/en-US/donation-form/tithing-5" target="_blank" class="btn-white-outline">Contribute</a>
+      <a href="https://www.zeffy.com/en-US/donation-form/tithing-5" target="_blank" class="btn-white-outline" rel="noopener noreferrer">Contribute</a>
     </div>
     <div style="margin-top:28px;">
       <p style="font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:14px;">Follow Us</p>
       <div class="footer-social">
-        <a href="https://www.facebook.com/groups/2354953164804602/" target="_blank">f</a>
-        <a href="https://www.instagram.com/daleyouthgroup" target="_blank">ig</a>
+        <a href="https://www.facebook.com/groups/2354953164804602/" target="_blank" rel="noopener noreferrer" aria-label="Dale Baptist Church on Facebook">f</a>
+        <a href="https://www.instagram.com/daleyouthgroup" target="_blank" rel="noopener noreferrer" aria-label="Dale Youth Group on Instagram">ig</a>
       </div>
     </div>
   </div>
@@ -817,20 +812,27 @@
 <script>
 (function() {
   // ── HAMBURGER ──
-  var btn = document.getElementById('hamburger');
+  var btn  = document.getElementById('hamburger');
   var menu = document.getElementById('mobileMenu');
+
+  function setOpen(open) {
+    if (open) {
+      menu.classList.add('open');
+      btn.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+    } else {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+    }
+  }
 
   function toggleMenu(e) {
     e.preventDefault();
     e.stopPropagation();
-    var isOpen = menu.classList.contains('open');
-    if (isOpen) {
-      menu.classList.remove('open');
-      btn.classList.remove('open');
-    } else {
-      menu.classList.add('open');
-      btn.classList.add('open');
-    }
+    setOpen(!menu.classList.contains('open'));
   }
 
   btn.addEventListener('click', toggleMenu);
@@ -838,19 +840,24 @@
 
   menu.querySelectorAll('a').forEach(function(link) {
     link.addEventListener('click', function() {
-      menu.classList.remove('open');
-      btn.classList.remove('open');
+      setOpen(false);
     });
   });
 
   document.addEventListener('click', function(e) {
     if (!menu.contains(e.target) && !btn.contains(e.target)) {
-      menu.classList.remove('open');
-      btn.classList.remove('open');
+      setOpen(false);
     }
   });
 
-  // ── CAROUSEL ──
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) {
+      setOpen(false);
+      btn.focus();
+    }
+  });
+
+    // ── CAROUSEL ──
   var track = document.getElementById('carouselTrack');
   var dotsWrap = document.getElementById('carouselDots');
   if (!track || !dotsWrap) return;

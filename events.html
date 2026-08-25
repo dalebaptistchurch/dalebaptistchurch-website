@@ -4,6 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events | Dale Baptist Church</title>
+<meta name="description" content="Discover upcoming events at Dale Baptist Church, including church gatherings, youth activities, retreats, and community opportunities." />
+<link rel="canonical" href="https://www.dalebaptistchurch.org/events.html" />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="https://www.dalebaptistchurch.org/events.html" />
+<meta property="og:title"       content="Events | Dale Baptist Church" />
+<meta property="og:description" content="Discover upcoming events at Dale Baptist Church, including church gatherings, youth activities, retreats, and community opportunities." />
+<meta property="og:image"       content="https://www.dalebaptistchurch.org/images/og-image.jpg" />
+<meta property="og:locale"      content="en_US" />
+<meta property="og:site_name"   content="Dale Baptist Church" />
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content="Events | Dale Baptist Church" />
+<meta name="twitter:description" content="Discover upcoming events at Dale Baptist Church, including church gatherings, youth activities, retreats, and community opportunities." />
+<meta name="twitter:image"       content="https://www.dalebaptistchurch.org/images/og-image.jpg" />
+<link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -194,7 +209,7 @@
   .time-sub {
     font-size: 0.6rem; font-weight: 500;
     letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.55);
   }
   @media (min-width: 769px) {
     .times-strip { grid-template-columns: repeat(4, 1fr); }
@@ -481,7 +496,7 @@
   .footer-logo { margin-bottom: 20px; }
   .footer-logo img { height: 40px; width: auto; display: block; }
   .footer-tagline {
-    font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    font-size: 0.8rem; color: rgba(255,255,255,0.65);
     line-height: 1.7; margin-bottom: 32px; max-width: 320px;
   }
   .footer-links {
@@ -501,7 +516,7 @@
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 4px; display: flex;
     align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.4); text-decoration: none;
+    color: rgba(255,255,255,0.65); text-decoration: none;
     font-size: 0.75rem; font-weight: 700;
     transition: border-color 0.2s, color 0.2s;
   }
@@ -515,6 +530,24 @@
   @media (min-width: 769px) {
     footer { padding: 60px 48px 40px; display: grid; grid-template-columns: 2fr 1fr; gap: 48px; }
     .footer-bottom { grid-column: span 2; }
+  }
+
+  /* ── SKIP LINK ── */
+  .skip-link {
+    position: absolute; left: -9999px; top: 8px;
+    background: var(--black); color: var(--white);
+    padding: 8px 16px; z-index: 9999;
+    border-radius: 4px;
+    font-size: 0.82rem; font-weight: 700;
+    text-decoration: none;
+  }
+  .skip-link:focus { left: 16px; }
+
+  /* ── KEYBOARD FOCUS ── */
+  :focus-visible {
+    outline: 3px solid #dc2626;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 </style>
 <style>
@@ -658,6 +691,7 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <!-- NAV -->
 <nav>
@@ -671,13 +705,13 @@
     <li><a href="events.html">Events</a></li>
     <li><a href="#events" class="nav-cta">Join Us!</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button">
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button" aria-expanded="false" aria-controls="mobileMenu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation menu">
+<div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation" aria-hidden="true">
   <a href="index.html">Home</a>
   <a href="about.html">About</a>
   <a href="sermons.html">Sermons</a>
@@ -685,6 +719,7 @@
   <a href="events.html">Events</a>
   <a href="#events" class="mob-cta">Join Us!</a>
 </div>
+<main id="main-content">
 
 
 
@@ -714,7 +749,7 @@
   <div class="time-item">
     <span class="time-label">Wednesday</span>
     <span class="time-value">5:00</span>
-    <span class="time-sub">Youth Forum</span>
+    <span class="time-sub">Youth &amp; Kids</span>
   </div>
 </div>
 
@@ -739,7 +774,7 @@
 
        IMAGES: Save your image to the images/
        folder and reference it like:
-       src="images/fallscreek.jpg"
+       src="images/falls-creek-2026.webp"
        Use any image — a logo, photo, or fun
        stock image that fits the event vibe.
        Recommended size: 400x320px or similar.
@@ -747,86 +782,37 @@
 
   <div class="events-list">
 
-    <!-- EVENT: Falls Creek 2026 -->
-    <div class="event-item">
-      <img class="event-image"
-        src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80"
-        alt="Falls Creek 2026" />
-      <div class="event-body">
-        <div class="event-meta">
-          <span class="event-date">Summer 2026</span>
-          <span class="event-tag tag-youth">Youth</span>
-        </div>
-        <h2 class="event-title">Falls Creek 2026</h2>
-        <p class="event-desc">Registration is open for Falls Creek 2026 — one of the largest Christian youth camps in the world, held in the Arbuckle Mountains of Oklahoma. This is a BIG deal for our church. Don't miss it!</p>
-        <p class="event-time">&#9656; Grades 6–12 &nbsp;&middot;&nbsp; Details coming soon</p>
-        <a href="events.html" class="event-link">Registration Info →</a>
-      </div>
-    </div>
-
-    <!-- EVENT: VBS -->
-    <div class="event-item">
-      <img class="event-image"
-        src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=400&q=80"
-        alt="Vacation Bible School" />
-      <div class="event-body">
-        <div class="event-meta">
-          <span class="event-date">Summer 2025 — Date TBD</span>
-          <span class="event-tag tag-all">All Ages</span>
-        </div>
-        <h2 class="event-title">Vacation Bible School</h2>
-        <p class="event-desc">VBS is one of our favorite weeks of the year! Open to all children in the community. Fun, faith, and a whole lot of love. Stay tuned for dates and details.</p>
-        <p class="event-time">&#9656; All children welcome &nbsp;&middot;&nbsp; Date coming soon</p>
-      </div>
-    </div>
-
     <!-- EVENT: Men's Prayer Breakfast -->
     <div class="event-item">
-      <img class="event-image"
+      <img loading="lazy" class="event-image"
         src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=400&q=80"
         alt="Men's Prayer Breakfast" />
       <div class="event-body">
         <div class="event-meta">
-          <!-- UPDATE DATE EACH TIME -->
-          <span class="event-date">Next Date — TBD</span>
+          <span class="event-date">Saturday, September 12, 2026</span>
           <span class="event-tag tag-men">Men</span>
         </div>
         <h2 class="event-title">Men's Prayer Breakfast</h2>
-        <p class="event-desc">Join the men of Dale Baptist for breakfast, fellowship, and prayer. Usually held the first Saturday of every other month — check back for the next date.</p>
-        <p class="event-time">&#9656; Morning &nbsp;&middot;&nbsp; Men of all ages welcome</p>
+        <p class="event-desc">Join the men of Dale Baptist for breakfast, fellowship, and prayer. Held every other month — all men welcome!</p>
+        <p class="event-time">&#9656; Men of all ages welcome</p>
       </div>
     </div>
 
-    <!-- EVENT: Women's Retreat -->
-    <div class="event-item">
-      <img class="event-image"
-        src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80"
-        alt="Women's Retreat" />
-      <div class="event-body">
-        <div class="event-meta">
-          <!-- UPDATE DATE WHEN KNOWN -->
-          <span class="event-date">Annual — Date TBD</span>
-          <span class="event-tag tag-women">Women</span>
-        </div>
-        <h2 class="event-title">Women's Retreat</h2>
-        <p class="event-desc">Our annual women's retreat is a special time set apart for rest, worship, and connection. Details for this year's retreat will be announced soon.</p>
-        <p class="event-time">&#9656; Women of Dale Baptist &nbsp;&middot;&nbsp; Details coming soon</p>
-      </div>
-    </div>
+    
 
     <!-- EVENT: Non-Traditional Thanksgiving Lunch -->
     <div class="event-item">
-      <img class="event-image"
+      <img loading="lazy" class="event-image"
         src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&q=80"
         alt="Non-Traditional Thanksgiving Lunch" />
       <div class="event-body">
         <div class="event-meta">
-          <span class="event-date">November 2025 — Date TBD</span>
+          <span class="event-date">Sunday, November 22, 2026</span>
           <span class="event-tag tag-church">Church Family</span>
         </div>
         <h2 class="event-title">Non-Traditional Thanksgiving Lunch</h2>
         <p class="event-desc">Skip the turkey — we do Thanksgiving our own way! Join the church family for our annual non-traditional Thanksgiving lunch. Everyone is welcome.</p>
-        <p class="event-time">&#9656; After Sunday service &nbsp;&middot;&nbsp; Bring a dish to share</p>
+        <p class="event-time">&#9656; Time to be announced &nbsp;&middot;&nbsp; Bring a dish to share</p>
       </div>
     </div>
 
@@ -842,11 +828,12 @@
   </div>
 </section>
 
-<footer>
+
+</main><footer>
   <div>
     <div style="margin-bottom:20px;">
       <p style="font-size:1.1rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--white);">Dale Baptist Church</p>
-      <p style="font-size:0.6rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-top:4px;">Dale, Oklahoma</p>
+      <p style="font-size:0.6rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-top:4px;">Dale, Oklahoma</p>
     </div>
     <p class="footer-tagline">Proclaiming the gospel of Jesus Christ and welcoming all people — in Dale, Oklahoma and beyond.</p>
     <div class="footer-links">
@@ -864,17 +851,18 @@
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Sunday School — 9:45 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Worship — 11:00 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Youth Forum — Wed 5:00 PM</p>
+      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid&#8217;s Korner — Wed 5:00 PM</p>
     </div>
 
     <div style="margin-top:28px;">
       <p style="font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:14px;">Give Online</p>
-      <a href="https://www.zeffy.com/en-US/donation-form/tithing-5" target="_blank" class="btn-white-outline">Contribute</a>
+      <a href="https://www.zeffy.com/en-US/donation-form/tithing-5" target="_blank" class="btn-white-outline" rel="noopener noreferrer">Contribute</a>
     </div>
     <div style="margin-top:28px;">
       <p style="font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:14px;">Follow Us</p>
       <div class="footer-social">
-        <a href="https://www.facebook.com/groups/2354953164804602/" target="_blank">f</a>
-        <a href="https://www.instagram.com/daleyouthgroup" target="_blank">ig</a>
+        <a href="https://www.facebook.com/groups/2354953164804602/" target="_blank" rel="noopener noreferrer" aria-label="Dale Baptist Church on Facebook">f</a>
+        <a href="https://www.instagram.com/daleyouthgroup" target="_blank" rel="noopener noreferrer" aria-label="Dale Youth Group on Instagram">ig</a>
       </div>
     </div>
   </div>
@@ -886,20 +874,27 @@
 <script>
 (function() {
   // ── HAMBURGER ──
-  var btn = document.getElementById('hamburger');
+  var btn  = document.getElementById('hamburger');
   var menu = document.getElementById('mobileMenu');
+
+  function setOpen(open) {
+    if (open) {
+      menu.classList.add('open');
+      btn.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+    } else {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+    }
+  }
 
   function toggleMenu(e) {
     e.preventDefault();
     e.stopPropagation();
-    var isOpen = menu.classList.contains('open');
-    if (isOpen) {
-      menu.classList.remove('open');
-      btn.classList.remove('open');
-    } else {
-      menu.classList.add('open');
-      btn.classList.add('open');
-    }
+    setOpen(!menu.classList.contains('open'));
   }
 
   btn.addEventListener('click', toggleMenu);
@@ -907,83 +902,23 @@
 
   menu.querySelectorAll('a').forEach(function(link) {
     link.addEventListener('click', function() {
-      menu.classList.remove('open');
-      btn.classList.remove('open');
+      setOpen(false);
     });
   });
 
   document.addEventListener('click', function(e) {
     if (!menu.contains(e.target) && !btn.contains(e.target)) {
-      menu.classList.remove('open');
-      btn.classList.remove('open');
+      setOpen(false);
     }
   });
 
-  // ── CAROUSEL ──
-  var track = document.getElementById('carouselTrack');
-  var dotsWrap = document.getElementById('carouselDots');
-  if (!track || !dotsWrap) return;
-
-  // Remove expired slides
-  var today = new Date();
-  today.setHours(0,0,0,0);
-  var allSlides = track.querySelectorAll('.carousel-slide[data-expires]');
-  allSlides.forEach(function(slide) {
-    var exp = new Date(slide.getAttribute('data-expires'));
-    exp.setHours(23,59,59,0);
-    if (today > exp) slide.remove();
-  });
-
-  var slides = track.querySelectorAll('.carousel-slide');
-  if (slides.length === 0) {
-    track.closest('.carousel-section').style.display = 'none';
-    return;
-  }
-
-  var current = 0;
-  var timer;
-  var slideWidth = slides[0].offsetWidth + 16;
-
-  // Build dots
-  slides.forEach(function(_, i) {
-    var dot = document.createElement('button');
-    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', 'Go to slide ' + (i+1));
-    dot.addEventListener('click', function() { goTo(i); resetTimer(); });
-    dotsWrap.appendChild(dot);
-  });
-
-  function goTo(n) {
-    current = (n + slides.length) % slides.length;
-    slideWidth = slides[0].offsetWidth + 16;
-    track.style.transform = 'translateX(' + (-current * slideWidth) + 'px)';
-    dotsWrap.querySelectorAll('.carousel-dot').forEach(function(d, i) {
-      d.classList.toggle('active', i === current);
-    });
-  }
-
-  function resetTimer() {
-    clearInterval(timer);
-    timer = setInterval(function() { goTo(current + 1); }, 5000);
-  }
-
-  // Touch/swipe support
-  var startX = 0;
-  track.addEventListener('touchstart', function(e) {
-    startX = e.touches[0].clientX;
-    clearInterval(timer);
-  }, {passive: true});
-  track.addEventListener('touchend', function(e) {
-    var diff = startX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) {
-      goTo(diff > 0 ? current + 1 : current - 1);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) {
+      setOpen(false);
+      btn.focus();
     }
-    resetTimer();
-  }, {passive: true});
+  });
 
-  window.addEventListener('resize', function() { goTo(current); });
-
-  resetTimer();
 })();
 </script>
 <script>
