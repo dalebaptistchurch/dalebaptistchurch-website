@@ -81,6 +81,18 @@
   .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+  /* ── MOBILE HEADER CONNECT LINK ── */
+  .mob-connect-btn {
+    display: none;
+    color: var(--black);
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--black);
+    padding: 6px 12px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
   .mobile-menu {
     display: none; position: fixed;
     top: 80px; left: 0; right: 0; bottom: 0;
@@ -108,7 +120,11 @@
 
   @media (max-width: 768px) {
     .hamburger { display: flex; }
+    .mob-connect-btn { display: inline-flex; align-items: center; }
     .nav-links { display: none !important; }
+  }
+  @media (max-width: 320px) {
+    .mob-connect-btn { padding: 5px 8px; font-size: 0.58rem; }
   }
   @media (min-width: 769px) {
     nav { padding: 0 48px; height: 68px; }
@@ -758,10 +774,6 @@
     padding: 22px 24px;
     background: var(--white);
   }
-  .community-item-icon {
-    font-size: 1.3rem; flex-shrink: 0; line-height: 1;
-    padding-top: 2px;
-  }
   .community-item strong {
     display: block; font-size: 0.82rem; font-weight: 700;
     color: var(--black); margin-bottom: 5px;
@@ -805,8 +817,10 @@
     <li><a href="sermons.html">Sermons</a></li>
     <li><a href="ministries.html">Ministries</a></li>
     <li><a href="events.html">Events</a></li>
-    <li><a href="#events" class="nav-cta">Join Us!</a></li>
+    <li><a href="connect.html">Connect</a></li>
+    <li><a href="index.html#events" class="nav-cta">Join Us!</a></li>
   </ul>
+  <a href="connect.html" class="mob-connect-btn">Connect</a>
   <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button" aria-expanded="false" aria-controls="mobileMenu">
     <span></span><span></span><span></span>
   </button>
@@ -819,7 +833,8 @@
   <a href="sermons.html">Sermons</a>
   <a href="ministries.html">Ministries</a>
   <a href="events.html">Events</a>
-  <a href="#events" class="mob-cta">Join Us!</a>
+  <a href="connect.html">Connect</a>
+  <a href="index.html#events" class="mob-cta">Join Us!</a>
 </div>
 <main id="main-content">
 
@@ -900,9 +915,13 @@
     <!-- Kid's Korner -->
     <div class="ministry-card">
       <span class="ministry-tag tag-all">Weekly</span>
-      <h3>Kid&#8217;s Korner</h3>
-      <p>Kid&#8217;s Korner helps children understand biblical truth and learn how it applies to their everyday lives through engaging, age-appropriate activities and lessons.</p>
+      <h3>Kid's Korner</h3>
+      <p>Kid's Korner helps children understand biblical truth and learn how it applies to their everyday lives through engaging, age-appropriate activities and lessons.</p>
       <div class="card-detail">&#9656; Wednesdays at 5:00 PM &nbsp;&middot;&nbsp; Kindergarten through 5th grade</div>
+      <div class="card-scripture">
+        <p>"Train up a child in the way he should go; even when he is old he will not depart from it."</p>
+        <cite>Proverbs 22:6 ESV</cite>
+      </div>
     </div>
 
   
@@ -910,12 +929,12 @@
   </div>
 </section>
 
-<!-- PROVERBS QUOTE BANNER -->
+<!-- LOCAL MINISTRY QUOTE BANNER -->
 <section class="connect-section" style="padding-top:36px; padding-bottom:36px;">
   <div style="text-align:center; max-width:640px; margin:0 auto;">
     <span class="connect-label">Scripture</span>
-    <p style="font-size:clamp(1rem,3.5vw,1.35rem); font-weight:400; line-height:1.7; color:rgba(255,255,255,0.8); font-style:italic; margin-bottom:12px;">"Train up a child in the way he should go; even when he is old he will not depart from it."</p>
-    <span class="verse-ref">Proverbs 22:6 ESV</span>
+    <p style="font-size:clamp(1rem,3.5vw,1.35rem); font-weight:400; line-height:1.7; color:rgba(255,255,255,0.8); font-style:italic; margin:0 auto 12px; text-align:center;">"So then, as we have opportunity, let us do good to everyone, and especially to those who are of the household of faith."</p>
+    <span class="verse-ref">Galatians 6:10 ESV</span>
   </div>
 </section>
 
@@ -964,28 +983,24 @@
   </div>
   <div class="community-items">
     <div class="community-item">
-      <div class="community-item-icon">🏫</div>
       <div class="community-item-text">
         <strong>Dale Public Schools Partnership</strong>
         <p>We are always looking for ways to partner with Dale Public Schools — to be present, available, and a blessing to students, teachers, and families in our community.</p>
       </div>
     </div>
     <div class="community-item">
-      <div class="community-item-icon">📖</div>
       <div class="community-item-text">
         <strong>LifeWise Academy</strong>
         <p>Dale Baptist Church partners with LifeWise Academy by providing space each week for Bible classes serving local young people.</p>
       </div>
     </div>
     <div class="community-item">
-      <div class="community-item-icon">🥫</div>
       <div class="community-item-text">
         <strong>McLoud Food Pantry</strong>
         <p>We partner with and support the McLoud food pantry, and connect people in need with this resource when we can.</p>
       </div>
     </div>
     <div class="community-item">
-      <div class="community-item-icon">🤝</div>
       <div class="community-item-text">
         <strong>Always Growing</strong>
         <p>We may be small, but we have a big heart. If you have an idea for how we can serve our community better, we'd love to hear it.</p>
@@ -1024,7 +1039,7 @@
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Sunday School — 9:45 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Worship — 11:00 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Youth Forum — Wed 5:00 PM</p>
-      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid&#8217;s Korner — Wed 5:00 PM</p>
+      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid's Korner — Wed 5:00 PM</p>
     </div>
 
     <div style="margin-top:28px;">

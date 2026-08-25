@@ -1,0 +1,90 @@
+backend:
+  name: git-gateway
+  branch: main
+
+site_url: https://www.dalebaptistchurch.org
+display_url: https://www.dalebaptistchurch.org
+logo_url: /images/dbc-logo-192.png
+
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: pastor_notes
+    label: Pastor Notes
+    label_singular: Pastor Note
+    folder: content/pastor-notes
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date}} — {{title}}{{draft}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: Author, name: author, widget: string, default: Pastor }
+      - label: Draft
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: Turn this on to keep the note off every public page.
+      - { label: Note, name: body, widget: richtext }
+
+  - name: events
+    label: Events
+    label_singular: Event
+    folder: content/events
+    create: true
+    delete: true
+    slug: "{{event_date}}-{{slug}}"
+    summary: "{{event_date}} — {{title}}{{draft}}"
+    sortable_fields: [event_date, title]
+    fields:
+      - { label: Event Name, name: title, widget: string }
+      - label: Event Date
+        name: event_date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+      - label: Announcement Date
+        name: announcement_date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: false
+        hint: Leave blank to display immediately. A future date keeps it hidden until that day.
+      - label: Expiration Date
+        name: expiration_date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: false
+        hint: Leave blank to remove the event automatically the day after its event date.
+      - label: Audience
+        name: category
+        widget: select
+        options: [All Church, Church Family, Youth, Children, Men, Women, Community]
+        default: All Church
+      - { label: Description, name: description, widget: text }
+      - label: Additional Details
+        name: details
+        widget: string
+        required: false
+        hint: Example: Time to be announced · Bring a dish to share
+      - label: Image
+        name: image
+        widget: image
+        required: false
+        hint: If blank, the church exterior image will be used.
+      - label: Feature on Homepage
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+      - label: Draft
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: Turn this on to keep the event off every public page.

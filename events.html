@@ -81,6 +81,18 @@
   .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+  /* ── MOBILE HEADER CONNECT LINK ── */
+  .mob-connect-btn {
+    display: none;
+    color: var(--black);
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--black);
+    padding: 6px 12px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
   .mobile-menu {
     display: none; position: fixed;
     top: 80px; left: 0; right: 0; bottom: 0;
@@ -108,7 +120,11 @@
 
   @media (max-width: 768px) {
     .hamburger { display: flex; }
+    .mob-connect-btn { display: inline-flex; align-items: center; }
     .nav-links { display: none !important; }
+  }
+  @media (max-width: 320px) {
+    .mob-connect-btn { padding: 5px 8px; font-size: 0.58rem; }
   }
   @media (min-width: 769px) {
     nav { padding: 0 48px; height: 68px; }
@@ -703,8 +719,10 @@
     <li><a href="sermons.html">Sermons</a></li>
     <li><a href="ministries.html">Ministries</a></li>
     <li><a href="events.html">Events</a></li>
-    <li><a href="#events" class="nav-cta">Join Us!</a></li>
+    <li><a href="connect.html">Connect</a></li>
+    <li><a href="index.html#events" class="nav-cta">Join Us!</a></li>
   </ul>
+  <a href="connect.html" class="mob-connect-btn">Connect</a>
   <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button" aria-expanded="false" aria-controls="mobileMenu">
     <span></span><span></span><span></span>
   </button>
@@ -717,7 +735,8 @@
   <a href="sermons.html">Sermons</a>
   <a href="ministries.html">Ministries</a>
   <a href="events.html">Events</a>
-  <a href="#events" class="mob-cta">Join Us!</a>
+  <a href="connect.html">Connect</a>
+  <a href="index.html#events" class="mob-cta">Join Us!</a>
 </div>
 <main id="main-content">
 
@@ -761,61 +780,10 @@
     <span>This page is updated regularly. Check back often for the latest events and announcements from Dale Baptist Church.</span>
   </div>
 
-  <!-- ============================================
-       HOW TO UPDATE THIS PAGE:
-
-       ADD AN EVENT: Copy any .event-item block
-       below and paste it at the TOP of the list.
-       Update the image src, date, tag, title,
-       description, and time.
-
-       REMOVE AN EVENT: Delete the entire
-       .event-item block when the event has passed.
-
-       IMAGES: Save your image to the images/
-       folder and reference it like:
-       src="images/falls-creek-2026.webp"
-       Use any image — a logo, photo, or fun
-       stock image that fits the event vibe.
-       Recommended size: 400x320px or similar.
-       ============================================ -->
-
   <div class="events-list">
-
-    <!-- EVENT: Men's Prayer Breakfast -->
-    <div class="event-item">
-      <img loading="lazy" class="event-image"
-        src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=400&q=80"
-        alt="Men's Prayer Breakfast" />
-      <div class="event-body">
-        <div class="event-meta">
-          <span class="event-date">Saturday, September 12, 2026</span>
-          <span class="event-tag tag-men">Men</span>
-        </div>
-        <h2 class="event-title">Men's Prayer Breakfast</h2>
-        <p class="event-desc">Join the men of Dale Baptist for breakfast, fellowship, and prayer. Held every other month — all men welcome!</p>
-        <p class="event-time">&#9656; Men of all ages welcome</p>
-      </div>
-    </div>
-
-    
-
-    <!-- EVENT: Non-Traditional Thanksgiving Lunch -->
-    <div class="event-item">
-      <img loading="lazy" class="event-image"
-        src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&q=80"
-        alt="Non-Traditional Thanksgiving Lunch" />
-      <div class="event-body">
-        <div class="event-meta">
-          <span class="event-date">Sunday, November 22, 2026</span>
-          <span class="event-tag tag-church">Church Family</span>
-        </div>
-        <h2 class="event-title">Non-Traditional Thanksgiving Lunch</h2>
-        <p class="event-desc">Skip the turkey — we do Thanksgiving our own way! Join the church family for our annual non-traditional Thanksgiving lunch. Everyone is welcome.</p>
-        <p class="event-time">&#9656; Time to be announced &nbsp;&middot;&nbsp; Bring a dish to share</p>
-      </div>
-    </div>
-
+    <!-- CMS:EVENT-LIST:START -->
+    <!-- Event cards are generated from content/events. -->
+    <!-- CMS:EVENT-LIST:END -->
   </div>
 </section>
 
@@ -851,7 +819,7 @@
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Sunday School — 9:45 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Worship — 11:00 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Youth Forum — Wed 5:00 PM</p>
-      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid&#8217;s Korner — Wed 5:00 PM</p>
+      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid's Korner — Wed 5:00 PM</p>
     </div>
 
     <div style="margin-top:28px;">
@@ -918,6 +886,27 @@
       btn.focus();
     }
   });
+
+  // Respect optional announcement and expiry dates without another deployment.
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  var eventList = document.querySelector('.events-list');
+  if (eventList) {
+    eventList.querySelectorAll('.event-item').forEach(function(item) {
+      var startsValue = item.getAttribute('data-starts');
+      var expiresValue = item.getAttribute('data-expires');
+      if (startsValue && today < new Date(startsValue + 'T00:00:00')) {
+        item.remove();
+        return;
+      }
+      if (expiresValue && today > new Date(expiresValue + 'T23:59:59')) {
+        item.remove();
+      }
+    });
+    if (!eventList.querySelector('.event-item')) {
+      eventList.innerHTML = '<p style="padding:32px; background:var(--white); color:var(--gray-dark); text-align:center;">No upcoming events are currently posted. Please check back soon.</p>';
+    }
+  }
 
 })();
 </script>

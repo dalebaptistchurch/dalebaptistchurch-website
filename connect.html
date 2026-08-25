@@ -81,6 +81,18 @@
   .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+  /* ── MOBILE HEADER CONNECT LINK ── */
+  .mob-connect-btn {
+    display: none;
+    color: var(--black);
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--black);
+    padding: 6px 12px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
   .mobile-menu {
     display: none; position: fixed;
     top: 80px; left: 0; right: 0; bottom: 0;
@@ -108,7 +120,11 @@
 
   @media (max-width: 768px) {
     .hamburger { display: flex; }
+    .mob-connect-btn { display: inline-flex; align-items: center; }
     .nav-links { display: none !important; }
+  }
+  @media (max-width: 320px) {
+    .mob-connect-btn { padding: 5px 8px; font-size: 0.58rem; }
   }
   @media (min-width: 769px) {
     nav { padding: 0 48px; height: 68px; }
@@ -805,8 +821,10 @@
     <li><a href="sermons.html">Sermons</a></li>
     <li><a href="ministries.html">Ministries</a></li>
     <li><a href="events.html">Events</a></li>
-    <li><a href="#events" class="nav-cta">Join Us!</a></li>
+    <li><a href="connect.html">Connect</a></li>
+    <li><a href="index.html#events" class="nav-cta">Join Us!</a></li>
   </ul>
+  <a href="connect.html" class="mob-connect-btn">Connect</a>
   <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button" aria-expanded="false" aria-controls="mobileMenu">
     <span></span><span></span><span></span>
   </button>
@@ -819,7 +837,8 @@
   <a href="sermons.html">Sermons</a>
   <a href="ministries.html">Ministries</a>
   <a href="events.html">Events</a>
-  <a href="#events" class="mob-cta">Join Us!</a>
+  <a href="connect.html">Connect</a>
+  <a href="index.html#events" class="mob-cta">Join Us!</a>
 </div>
 <main id="main-content">
 
@@ -1042,7 +1061,7 @@
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Sunday School — 9:45 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Worship — 11:00 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Youth Forum — Wed 5:00 PM</p>
-      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid&#8217;s Korner — Wed 5:00 PM</p>
+      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid's Korner — Wed 5:00 PM</p>
     </div>
 
     <div style="margin-top:28px;">

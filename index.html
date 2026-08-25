@@ -81,6 +81,18 @@
   .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+  /* ── MOBILE HEADER CONNECT LINK ── */
+  .mob-connect-btn {
+    display: none;
+    color: var(--black);
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--black);
+    padding: 6px 12px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
   .mobile-menu {
     display: none; position: fixed;
     top: 80px; left: 0; right: 0; bottom: 0;
@@ -108,7 +120,11 @@
 
   @media (max-width: 768px) {
     .hamburger { display: flex; }
+    .mob-connect-btn { display: inline-flex; align-items: center; }
     .nav-links { display: none !important; }
+  }
+  @media (max-width: 320px) {
+    .mob-connect-btn { padding: 5px 8px; font-size: 0.58rem; }
   }
   @media (min-width: 769px) {
     nav { padding: 0 48px; height: 68px; }
@@ -550,6 +566,7 @@
     border-radius: 2px;
   }
 </style>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -564,8 +581,10 @@
     <li><a href="sermons.html">Sermons</a></li>
     <li><a href="ministries.html">Ministries</a></li>
     <li><a href="events.html">Events</a></li>
+    <li><a href="connect.html">Connect</a></li>
     <li><a href="#events" class="nav-cta">Join Us!</a></li>
   </ul>
+  <a href="connect.html" class="mob-connect-btn">Connect</a>
   <button class="hamburger" id="hamburger" aria-label="Toggle menu" type="button" aria-expanded="false" aria-controls="mobileMenu">
     <span></span><span></span><span></span>
   </button>
@@ -578,6 +597,7 @@
   <a href="sermons.html">Sermons</a>
   <a href="ministries.html">Ministries</a>
   <a href="events.html">Events</a>
+  <a href="connect.html">Connect</a>
   <a href="#events" class="mob-cta">Join Us!</a>
 </div>
 <main id="main-content">
@@ -645,7 +665,7 @@
               <span style="font-size:0.78rem; color:#666; font-weight:500;">Wed 5:00 PM</span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
-              <span style="font-size:0.82rem; font-weight:600; color:#333;">Kids Korner</span>
+              <span style="font-size:0.82rem; font-weight:600; color:#333;">Kid's Korner</span>
               <span style="font-size:0.78rem; color:#666; font-weight:500;">Wed 5:00 PM</span>
             </div>
           </div>
@@ -653,29 +673,9 @@
         </div>
       </div>
 
-      <!-- SLIDE 1: Men's Prayer Breakfast -->
-      <div class="carousel-slide" data-expires="2026-09-13">
-        <div class="slide-img" style="background-image:url('images/mens-prayer-breakfast.webp'); height:200px; background-size:cover; background-position:center;"></div>
-        <div class="slide-body">
-          <span class="slide-tag tag-men">Men</span>
-          <p class="slide-date">Saturday, September 12, 2026</p>
-          <h2 class="slide-title">Men's Prayer Breakfast</h2>
-          <p class="slide-desc">Breakfast, fellowship, and prayer. All men welcome! Held every other month.</p>
-          <a href="events.html" class="slide-link">Learn More</a>
-        </div>
-      </div>
-
-      <!-- SLIDE 2: Non-Traditional Thanksgiving Lunch -->
-      <div class="carousel-slide" data-expires="2026-11-23">
-        <div class="slide-img" style="background-image:url('images/church-exterior.webp'); height:200px; background-size:cover; background-position:center;"></div>
-        <div class="slide-body">
-          <span class="slide-tag tag-church">Church Family</span>
-          <p class="slide-date">Sunday, November 22, 2026</p>
-          <h2 class="slide-title">Non-Traditional Thanksgiving Lunch</h2>
-          <p class="slide-desc">Skip the turkey — we do Thanksgiving our own way! Everyone is welcome.</p>
-          <a href="events.html" class="slide-link">Learn More</a>
-        </div>
-      </div>
+      <!-- CMS:FEATURED-EVENTS:START -->
+      <!-- Featured event slides are generated from content/events. -->
+      <!-- CMS:FEATURED-EVENTS:END -->
 
     </div>
   </div>
@@ -689,6 +689,10 @@
   <p class="verse-text">"For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope."</p>
   <span class="verse-ref">Jeremiah 29:11 ESV</span>
 </div>
+
+<!-- CMS:PASTOR-NOTE:START -->
+<!-- The newest published Pastor Note is generated here. -->
+<!-- CMS:PASTOR-NOTE:END -->
 
 <!-- ABOUT -->
 <section class="about-section">
@@ -789,7 +793,7 @@
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Sunday School — 9:45 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Worship — 11:00 AM</p>
       <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Youth Forum — Wed 5:00 PM</p>
-      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid&#8217;s Korner — Wed 5:00 PM</p>
+      <p style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Kid's Korner — Wed 5:00 PM</p>
     </div>
 
     <div style="margin-top:28px;">
@@ -862,14 +866,21 @@
   var dotsWrap = document.getElementById('carouselDots');
   if (!track || !dotsWrap) return;
 
-  // Remove expired slides
+  // Remove slides before their announcement date or after expiry.
   var today = new Date();
   today.setHours(0,0,0,0);
-  var allSlides = track.querySelectorAll('.carousel-slide[data-expires]');
+  var allSlides = track.querySelectorAll('.carousel-slide');
   allSlides.forEach(function(slide) {
-    var exp = new Date(slide.getAttribute('data-expires'));
-    exp.setHours(23,59,59,0);
-    if (today > exp) slide.remove();
+    var startsValue = slide.getAttribute('data-starts');
+    var expiresValue = slide.getAttribute('data-expires');
+    if (startsValue) {
+      var starts = new Date(startsValue + 'T00:00:00');
+      if (today < starts) { slide.remove(); return; }
+    }
+    if (expiresValue) {
+      var expires = new Date(expiresValue + 'T23:59:59');
+      if (today > expires) slide.remove();
+    }
   });
 
   var slides = track.querySelectorAll('.carousel-slide');
@@ -930,6 +941,17 @@
 document.querySelectorAll('.copyright-year').forEach(function(element) {
   element.textContent = new Date().getFullYear();
 });
+</script>
+<script>
+if (window.netlifyIdentity) {
+  window.netlifyIdentity.on('init', function(user) {
+    if (!user) {
+      window.netlifyIdentity.on('login', function() {
+        window.location.href = '/admin/';
+      });
+    }
+  });
+}
 </script>
 </body>
 </html>
