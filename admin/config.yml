@@ -28,7 +28,7 @@ collections:
         widget: boolean
         default: false
         required: false
-        hint: Turn this on to keep the note off every public page.
+        hint: "Turn this on to keep the note off every public page."
       - { label: Note, name: body, widget: richtext }
 
   - name: events
@@ -53,14 +53,14 @@ collections:
         time_format: false
         format: "YYYY-MM-DD"
         required: false
-        hint: Leave blank to display immediately. A future date keeps it hidden until that day.
+        hint: "Leave blank to display immediately. A future date keeps it hidden until that day."
       - label: Expiration Date
         name: expiration_date
         widget: datetime
         time_format: false
         format: "YYYY-MM-DD"
         required: false
-        hint: Leave blank to remove the event automatically the day after its event date.
+        hint: "Leave blank to remove the event automatically the day after its event date."
       - label: Audience
         name: category
         widget: select
@@ -71,12 +71,12 @@ collections:
         name: details
         widget: string
         required: false
-        hint: Example: Time to be announced · Bring a dish to share
+        hint: "Example: Time to be announced · Bring a dish to share"
       - label: Image
         name: image
         widget: image
         required: false
-        hint: If blank, the church exterior image will be used.
+        hint: "If blank, the church exterior image will be used."
       - label: Feature on Homepage
         name: featured
         widget: boolean
@@ -87,4 +87,4 @@ collections:
         widget: boolean
         default: false
         required: false
-        hint: Turn this on to keep the event off every public page.
+        hint: "Turn this on to keep the event off every public page."
