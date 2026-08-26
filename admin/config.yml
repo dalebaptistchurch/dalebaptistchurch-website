@@ -88,3 +88,54 @@ collections:
         default: false
         required: false
         hint: "Turn this on to keep the event off every public page."
+      - { label: Button Link, name: action_url, widget: string, required: false, hint: "Optional page or external link for an event button." }
+      - { label: Button Text, name: action_label, widget: string, required: false }
+
+  - name: emphases
+    label: Church Emphases
+    label_singular: Church Emphasis
+    folder: content/emphases
+    create: true
+    delete: true
+    slug: "{{year}}-{{slug}}"
+    summary: "{{title}} — through {{end_date}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Start Date, name: start_date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: End Date, name: end_date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: Category, name: category, widget: string, default: Church Emphasis }
+      - { label: Short Description, name: description, widget: text }
+      - { label: Main Image, name: image, widget: image }
+      - { label: Giving Link, name: giving_url, widget: string, required: false }
+      - label: Project Gallery
+        name: gallery
+        widget: list
+        required: false
+        fields:
+          - { label: Image, name: image, widget: image }
+          - { label: Image Description, name: alt, widget: string }
+      - { label: Feature on Homepage, name: featured, widget: boolean, default: true, required: false }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false }
+      - { label: Full Description, name: body, widget: richtext }
+
+  - name: stories
+    label: Our Stories
+    label_singular: Story
+    folder: content/stories
+    create: true
+    delete: true
+    slug: "{{year}}-{{slug}}"
+    summary: "{{date}} — {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: Ministry, name: category, widget: select, options: [Youth, Children, Men, Women, Church Family, Community] }
+      - { label: Short Description, name: description, widget: text }
+      - { label: Main Image, name: image, widget: image }
+      - { label: YouTube Video Link, name: video_url, widget: string, required: false }
+      - { label: Highlight Number, name: stat_value, widget: string, required: false, hint: "Example: 10" }
+      - { label: Highlight Label, name: stat_label, widget: string, required: false, hint: "Example: Professions of Faith" }
+      - { label: Feature, name: featured, widget: boolean, default: false, required: false }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false }
+      - { label: Story, name: body, widget: richtext }

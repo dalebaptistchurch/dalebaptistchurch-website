@@ -29,4 +29,12 @@
     <loc>https://www.dalebaptistchurch.org/connect.html</loc>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://www.dalebaptistchurch.org/our-stories.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.dalebaptistchurch.org/stories/falls-creek.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
 </urlset>
