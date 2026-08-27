@@ -256,7 +256,7 @@
     border-bottom: 1px solid var(--black);
     padding-bottom: 1px;
   }
-  .carousel-track-outer { overflow: hidden; }
+  .carousel-track-outer { overflow: hidden; touch-action: pan-y; overscroll-behavior-x: contain; }
   .carousel-track {
     display: flex;
     transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
@@ -317,6 +317,19 @@
     cursor: pointer; padding: 0; transition: background 0.2s, transform 0.2s;
   }
   .carousel-dot.active { background: var(--black); transform: scale(1.4); }
+  .carousel-mobile-controls {
+    display: flex; justify-content: center; align-items: center; gap: 14px;
+    margin-top: 14px;
+  }
+  .carousel-arrow {
+    width: 42px; height: 42px; border: 1px solid var(--gray-border);
+    border-radius: 50%; background: var(--white); color: var(--black);
+    font-size: 1.25rem; line-height: 1; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .carousel-arrow:hover, .carousel-arrow:focus-visible {
+    background: var(--black); color: var(--white); border-color: var(--black);
+  }
 
   @media (min-width: 769px) {
     .carousel-section { padding: 64px 48px 48px; }
@@ -680,6 +693,10 @@
     </div>
   </div>
   <div class="carousel-dots" id="carouselDots"></div>
+  <div class="carousel-mobile-controls" aria-label="Carousel controls">
+    <button class="carousel-arrow" id="carouselPrevious" type="button" aria-label="Previous item">&#8592;</button>
+    <button class="carousel-arrow" id="carouselNext" type="button" aria-label="Next item">&#8594;</button>
+  </div>
 </section>
 
 <!-- VERSE OF THE WEEK -->
@@ -864,6 +881,8 @@
     // ── CAROUSEL ──
   var track = document.getElementById('carouselTrack');
   var dotsWrap = document.getElementById('carouselDots');
+  var previousButton = document.getElementById('carouselPrevious');
+  var nextButton = document.getElementById('carouselNext');
   if (!track || !dotsWrap) return;
 
   // Remove slides before their announcement date or after expiry.
@@ -915,6 +934,16 @@
     clearInterval(timer);
     timer = setInterval(function() { goTo(current + 1); }, 5000);
   }
+
+  previousButton.addEventListener('click', function() {
+    goTo(current - 1);
+    resetTimer();
+  });
+
+  nextButton.addEventListener('click', function() {
+    goTo(current + 1);
+    resetTimer();
+  });
 
   // Touch/swipe support
   var startX = 0;
