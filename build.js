@@ -3,215 +3,43 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
-
-const ROOT = process.cwd();
-const OUT = path.join(ROOT, 'public');
-const HTML_FILES = ['index.html', 'about.html', 'connect.html', 'events.html', 'ministries.html', 'sermons.html', 'thank-you.html'];
-const COPY_PATHS = ['images', 'admin', 'robots.txt', 'sitemap.xml'];
-
-function escapeHtml(value = '') {
-  return String(value).replace(/[&<>"']/g, char => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  })[char]);
-}
-
-function plainText(html = '') {
-  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-function safeMarkdown(markdown = '') {
-  return sanitizeHtml(marked.parse(String(markdown)), {
-    allowedTags: ['p', 'br', 'strong', 'em', 'blockquote', 'ul', 'ol', 'li', 'h2', 'h3', 'a'],
-    allowedAttributes: { a: ['href', 'title', 'target', 'rel'] },
-    allowedSchemes: ['http', 'https', 'mailto'],
-    transformTags: {
-      a: (_tag, attrs) => ({
-        tagName: 'a',
-        attribs: { ...attrs, rel: 'noopener noreferrer' }
-      })
-    }
-  });
-}
-
-function dateOnly(value) {
-  if (!value) return '';
-  if (value instanceof Date) return value.toISOString().slice(0, 10);
-  return String(value).slice(0, 10);
-}
-
-function dateLabel(value) {
-  const iso = dateOnly(value);
-  if (!iso) return '';
-  return new Intl.DateTimeFormat('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'
-  }).format(new Date(`${iso}T12:00:00Z`));
-}
-
-function nextDay(value) {
-  const iso = dateOnly(value);
-  const date = new Date(`${iso}T12:00:00Z`);
-  date.setUTCDate(date.getUTCDate() + 1);
-  return date.toISOString().slice(0, 10);
-}
-
-function readEntries(relativeDir) {
-  const dir = path.join(ROOT, relativeDir);
-  if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir)
-    .filter(name => name.endsWith('.md'))
-    .map(name => {
-      const parsed = matter(fs.readFileSync(path.join(dir, name), 'utf8'));
-      return { ...parsed.data, body: parsed.content, source: name };
-    });
-}
-
-function replaceRegion(html, name, content) {
-  const start = `<!-- CMS:${name}:START -->`;
-  const end = `<!-- CMS:${name}:END -->`;
-  const startIndex = html.indexOf(start);
-  const endIndex = html.indexOf(end);
-  if (startIndex < 0 || endIndex < 0 || endIndex < startIndex) {
-    throw new Error(`Missing or invalid CMS region: ${name}`);
-  }
-  if (html.indexOf(start, startIndex + start.length) >= 0 || html.indexOf(end, endIndex + end.length) >= 0) {
-    throw new Error(`CMS region must appear exactly once: ${name}`);
-  }
-  return html.slice(0, startIndex + start.length) + `\n${content}\n` + html.slice(endIndex);
-}
-
-function categoryClass(category = '') {
-  const value = String(category).toLowerCase();
-  if (value.includes('men')) return 'tag-men';
-  if (value.includes('women')) return 'tag-women';
-  if (value.includes('youth')) return 'tag-youth';
-  if (value.includes('church')) return 'tag-church';
-  return 'tag-all';
-}
-
-function eventDates(event) {
-  return {
-    starts: dateOnly(event.announcement_date),
-    expires: dateOnly(event.expiration_date) || nextDay(event.event_date)
-  };
-}
-
-function eventAttributes(event) {
-  const { starts, expires } = eventDates(event);
-  return `${starts ? ` data-starts="${escapeHtml(starts)}"` : ''} data-expires="${escapeHtml(expires)}"`;
-}
-
-function eventSlide(event) {
-  const image = event.image || '/images/church-exterior.webp';
-  return `      <div class="carousel-slide"${eventAttributes(event)}>
-        <div class="slide-img" style="background-image:url('${escapeHtml(image)}'); height:200px; background-size:cover; background-position:center;"></div>
-        <div class="slide-body">
-          <span class="slide-tag ${categoryClass(event.category)}">${escapeHtml(event.category || 'All Church')}</span>
-          <p class="slide-date">${escapeHtml(dateLabel(event.event_date))}</p>
-          <h2 class="slide-title">${escapeHtml(event.title)}</h2>
-          <p class="slide-desc">${escapeHtml(event.description)}</p>
-          <a href="events.html" class="slide-link">Learn More</a>
-        </div>
-      </div>`;
-}
-
-function eventCard(event) {
-  const image = event.image || '/images/church-exterior.webp';
-  const details = event.details ? `<p class="event-time">&#9656; ${escapeHtml(event.details)}</p>` : '';
-  return `    <div class="event-item"${eventAttributes(event)}>
-      <img loading="lazy" class="event-image" src="${escapeHtml(image)}" alt="${escapeHtml(event.title)}" />
-      <div class="event-body">
-        <div class="event-meta">
-          <span class="event-date">${escapeHtml(dateLabel(event.event_date))}</span>
-          <span class="event-tag ${categoryClass(event.category)}">${escapeHtml(event.category || 'All Church')}</span>
-        </div>
-        <h2 class="event-title">${escapeHtml(event.title)}</h2>
-        <p class="event-desc">${escapeHtml(event.description)}</p>
-        ${details}
-      </div>
-    </div>`;
-}
-
-function latestNoteSection(note) {
-  if (!note) {
-    return `<section class="pastor-note-home"><div class="pastor-note-home-inner"><span class="about-label">Pastor Notes</span><h2>A Note From Our Pastor</h2><p>No Pastor Note has been published yet.</p><a class="pastor-note-link" href="pastor-notes.html">View Pastor Notes</a></div></section>`;
-  }
-  const html = safeMarkdown(note.body);
-  const excerpt = plainText(html).slice(0, 360);
-  return `<section class="pastor-note-home"><div class="pastor-note-home-inner"><span class="about-label">Pastor Notes</span><p class="pastor-note-date">${escapeHtml(dateLabel(note.date))}</p><h2>${escapeHtml(note.title)}</h2><p>${escapeHtml(excerpt)}${plainText(html).length > 360 ? '…' : ''}</p><p class="pastor-note-author">— ${escapeHtml(note.author || 'Pastor')}</p><a class="pastor-note-link" href="pastor-notes.html">Read Pastor Notes</a></div></section>`;
-}
-
-const noteStyles = `
-  .pastor-note-home { padding:64px 24px; background:var(--gray-bg); }
-  .pastor-note-home-inner { max-width:760px; margin:0 auto; background:var(--white); border:1px solid var(--gray-border); border-radius:8px; padding:clamp(28px,5vw,52px); }
-  .pastor-note-home h2 { font-size:clamp(1.7rem,4vw,2.5rem); line-height:1.15; margin:10px 0 18px; }
-  .pastor-note-home p { color:var(--gray-dark); line-height:1.8; }
-  .pastor-note-date { font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
-  .pastor-note-author { margin:16px 0 24px; font-weight:700; color:var(--black) !important; }
-  .pastor-note-link { display:inline-block; padding:12px 18px; border:1px solid var(--black); border-radius:4px; color:var(--black); font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; text-decoration:none; }
-  .pastor-note-link:hover { background:var(--black); color:var(--white); }
-  .pastor-notes-page { padding:56px 24px 80px; background:var(--gray-bg); }
-  .pastor-notes-list { max-width:860px; margin:0 auto; display:flex; flex-direction:column; gap:24px; }
-  .pastor-note-card { padding:clamp(26px,5vw,48px); background:var(--white); border:1px solid var(--gray-border); border-radius:8px; }
-  .pastor-note-card h2 { font-size:clamp(1.5rem,3vw,2.1rem); margin:8px 0 18px; }
-  .pastor-note-body { color:var(--gray-dark); line-height:1.8; }
-  .pastor-note-body p, .pastor-note-body ul, .pastor-note-body ol, .pastor-note-body blockquote { margin:0 0 16px; }
-  .pastor-note-body blockquote { border-left:3px solid var(--black); padding-left:18px; }
-  .pastor-note-body a { color:var(--black); font-weight:700; }
-`;
-
-function pastorNotesPage(baseHtml, notes) {
-  const articles = notes.length ? notes.map(note => `
-    <article class="pastor-note-card">
-      <p class="pastor-note-date">${escapeHtml(dateLabel(note.date))}</p>
-      <h2>${escapeHtml(note.title)}</h2>
-      <div class="pastor-note-body">${safeMarkdown(note.body)}</div>
-      <p class="pastor-note-author">— ${escapeHtml(note.author || 'Pastor')}</p>
-    </article>`).join('') : '<article class="pastor-note-card"><h2>No notes published yet</h2><p>Our first Pastor Note will appear here soon.</p></article>';
-  const main = `<main id="main-content">
-<div class="about-page-hero"><div class="about-hero-inner"><span class="about-hero-eyebrow">Dale Baptist Church — Dale, Oklahoma</span><h1 class="about-hero-h1">Pastor Notes</h1><p class="about-hero-verse">Encouragement, updates, and reflections from our pastor.</p></div></div>
-<section class="pastor-notes-page"><div class="pastor-notes-list">${articles}</div></section>
-</main>`;
-  return baseHtml
-    .replaceAll('About Us | Dale Baptist Church', 'Pastor Notes | Dale Baptist Church')
-    .replaceAll('Learn what Dale Baptist Church believes, why we exist, and how we seek to follow Jesus and serve others in Dale, Oklahoma.', 'Read current and previous Pastor Notes from Dale Baptist Church in Dale, Oklahoma.')
-    .replaceAll('https://www.dalebaptistchurch.org/about.html', 'https://www.dalebaptistchurch.org/pastor-notes.html')
-    .replace('</style>', `${noteStyles}\n</style>`)
-    .replace(/<main id="main-content">[\s\S]*?<\/main>/, main);
-}
-
-function copyPath(relativePath) {
-  const source = path.join(ROOT, relativePath);
-  const destination = path.join(OUT, relativePath);
-  fs.cpSync(source, destination, { recursive: true });
-}
-
-fs.rmSync(OUT, { recursive: true, force: true });
-fs.mkdirSync(OUT, { recursive: true });
-
-const notes = readEntries('content/pastor-notes')
-  .filter(note => note.draft !== true)
-  .sort((a, b) => dateOnly(b.date).localeCompare(dateOnly(a.date)));
-
-const todayIso = new Date().toISOString().slice(0, 10);
-const events = readEntries('content/events')
-  .filter(event => event.draft !== true)
-  .filter(event => eventDates(event).expires >= todayIso)
-  .sort((a, b) => dateOnly(a.event_date).localeCompare(dateOnly(b.event_date)));
-
-for (const file of HTML_FILES) {
-  let html = fs.readFileSync(path.join(ROOT, file), 'utf8');
-  if (file === 'index.html') {
-    html = html.replace('</style>', `${noteStyles}\n</style>`);
-    html = replaceRegion(html, 'FEATURED-EVENTS', events.filter(event => event.featured === true).map(eventSlide).join('\n'));
-    html = replaceRegion(html, 'PASTOR-NOTE', latestNoteSection(notes[0]));
-  }
-  if (file === 'events.html') {
-    html = replaceRegion(html, 'EVENT-LIST', events.map(eventCard).join('\n'));
-  }
-  fs.writeFileSync(path.join(OUT, file), html);
-}
-
-for (const item of COPY_PATHS) copyPath(item);
-fs.writeFileSync(path.join(OUT, 'pastor-notes.html'), pastorNotesPage(fs.readFileSync(path.join(ROOT, 'about.html'), 'utf8'), notes));
-
-console.log(`Build complete: ${notes.length} published Pastor Notes, ${events.length} published Events.`);
+const ROOT=process.cwd(),OUT=path.join(ROOT,'public');
+const FILES=['index.html','about.html','connect.html','events.html','ministries.html','sermons.html','thank-you.html'];
+const COPIES=['images','admin','robots.txt','sitemap.xml','Dale-Baptist-Church-Constitution-and-Bylaws.pdf'];
+const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=v=>!v?'':v instanceof Date?v.toISOString().slice(0,10):String(v).slice(0,10);
+const label=v=>!iso(v)?'':new Intl.DateTimeFormat('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}).format(new Date(`${iso(v)}T12:00:00Z`));
+const next=v=>{let d=new Date(`${iso(v)}T12:00:00Z`);d.setUTCDate(d.getUTCDate()+1);return d.toISOString().slice(0,10)};
+const slug=s=>s.replace(/\.md$/,'').replace(/^\d{4}-/,'');
+const md=(v='')=>sanitizeHtml(marked.parse(String(v)),{allowedTags:['p','br','strong','em','blockquote','ul','ol','li','h2','h3','a'],allowedAttributes:{a:['href','title','target','rel']},allowedSchemes:['http','https','mailto']});
+const plain=h=>h.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+function entries(dir){let p=path.join(ROOT,dir);return fs.existsSync(p)?fs.readdirSync(p).filter(x=>x.endsWith('.md')).map(source=>{let x=matter(fs.readFileSync(path.join(p,source),'utf8'));return{...x.data,body:x.content,source}}):[]}
+function region(h,n,c){let a=`<!-- CMS:${n}:START -->`,b=`<!-- CMS:${n}:END -->`;if(!h.includes(a)||!h.includes(b))throw Error(`Missing ${n}`);return h.slice(0,h.indexOf(a)+a.length)+`\n${c}\n`+h.slice(h.indexOf(b))}
+function tag(c=''){c=String(c).toLowerCase();if(c.includes('women'))return'tag-women';if(c.includes('men'))return'tag-men';if(c.includes('youth'))return'tag-youth';if(c.includes('church'))return'tag-church';return'tag-all'}
+const attrs=(s,e)=>`${s?` data-starts="${esc(iso(s))}"`:''}${e?` data-expires="${esc(iso(e))}"`:''}`;
+const dates=e=>({s:iso(e.announcement_date),x:iso(e.expiration_date)||next(e.event_date)});
+function eventSlide(e){let d=dates(e);return `<div class="carousel-slide"${attrs(d.s,d.x)}><div class="slide-img" style="background-image:url('${esc(e.image||'/images/church-exterior.webp')}');height:200px;background-size:cover;background-position:center"></div><div class="slide-body"><span class="slide-tag ${tag(e.category)}">${esc(e.category||'All Church')}</span><p class="slide-date">${esc(label(e.event_date))}</p><h2 class="slide-title">${esc(e.title)}</h2><p class="slide-desc">${esc(e.description)}</p><a href="${esc(e.action_url||'events.html')}" class="slide-link">${esc(e.action_label||'Learn More')}</a></div></div>`}
+function emphasisSlide(e){return `<div class="carousel-slide"${attrs(e.start_date,next(e.end_date))}><div class="slide-img" style="background-image:url('${esc(e.image)}');height:200px;background-size:cover;background-position:center"></div><div class="slide-body"><span class="slide-tag tag-church">${esc(e.category||'Church Emphasis')}</span><p class="slide-date">Through ${esc(label(e.end_date))}</p><h2 class="slide-title">${esc(e.title)}</h2><p class="slide-desc">${esc(e.description)}</p><a href="emphases/${slug(e.source)}.html" class="slide-link">Learn More</a></div></div>`}
+function eventCard(e){let d=dates(e),a=e.action_url?`<a class="content-button" href="${esc(e.action_url)}">${esc(e.action_label||'Learn More')}</a>`:'';return `<article class="event-item"${attrs(d.s,d.x)}><img loading="lazy" class="event-image" src="${esc(e.image||'/images/church-exterior.webp')}" alt="${esc(e.title)}"><div class="event-body"><div class="event-meta"><span class="event-date">${esc(label(e.event_date))}</span><span class="event-tag ${tag(e.category)}">${esc(e.category||'All Church')}</span></div><h2 class="event-title">${esc(e.title)}</h2><p class="event-desc">${esc(e.description)}</p>${e.details?`<p class="event-time">&#9656; ${esc(e.details)}</p>`:''}${a}</div></article>`}
+const styles=`.content-button{display:inline-block;margin-top:18px;padding:12px 18px;background:#111;color:#fff!important;border:0;border-radius:4px;text-decoration:none;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.content-button:hover{background:#444}.site-admin-link{color:rgba(255,255,255,.35)!important;font-size:.65rem}.story-grid,.gallery-grid{display:grid;grid-template-columns:1fr;gap:20px}.story-card{background:#fff;border:1px solid var(--gray-border);border-radius:8px;overflow:hidden}.story-card img{width:100%;aspect-ratio:16/9;object-fit:cover}.story-card-body{padding:24px}.story-card h2{font-size:1.35rem;margin:8px 0 10px}.content-shell{max-width:980px;margin:auto;padding:56px 24px 80px}.content-hero{width:100%;max-height:560px;object-fit:cover;border-radius:8px;margin:24px 0}.content-copy{max-width:760px;margin:auto;color:var(--gray-dark);font-size:1rem;line-height:1.8}.content-copy h2{color:var(--black);margin:34px 0 12px}.stat-callout{background:#111;color:#fff;text-align:center;padding:30px;border-radius:8px;margin:28px 0}.stat-value{display:block;font-size:3rem;font-weight:800}.video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:30px 0}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.gallery-grid{margin-top:28px}.gallery-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px}.action-row{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0}.poll-card{max-width:720px;margin:32px auto;background:#fff;border:1px solid var(--gray-border);border-radius:8px;padding:clamp(24px,5vw,48px)}.rank-row{display:grid;gap:8px;margin:20px 0}.rank-row label{font-weight:700}.rank-row select{width:100%;padding:12px;border:1px solid #bbb;border-radius:4px;background:#fff}.form-message{display:none;padding:12px;margin:16px 0;border-radius:4px;background:#fff2f2;color:#8b1b1b}.community-logo{width:90px;height:74px;flex:0 0 90px;object-fit:contain;background:#fff;border:1px solid var(--gray-border);border-radius:6px;padding:8px}.stories-invite{max-width:900px;margin:0 auto;padding:48px 24px;text-align:center}.stories-invite h2{font-size:clamp(1.6rem,4vw,2.35rem);margin:10px 0}.stories-invite p{max-width:650px;margin:0 auto 24px;color:var(--gray-dark);line-height:1.75}@media(min-width:700px){.story-grid,.gallery-grid{grid-template-columns:repeat(2,1fr)}}`;
+const filter=`<script>(function(){var t=new Date();t.setHours(0,0,0,0);document.querySelectorAll('[data-starts],[data-expires]').forEach(function(x){var s=x.dataset.starts?new Date(x.dataset.starts+'T00:00:00'):null,e=x.dataset.expires?new Date(x.dataset.expires+'T00:00:00'):null;if((s&&t<s)||(e&&t>=e))x.remove()})})();</script>`;
+function enhance(h){h=h.replace('</style>',styles+'\n</style>').replace('</body>',filter+'\n</body>');return h.replace(/(<div class="footer-bottom">[\s\S]*?<\/div>)/,m=>m.replace('</div>',' · <a class="site-admin-link" href="/admin/">Website Admin</a></div>'))}
+const noteCss=`.pastor-note-home{padding:64px 24px;background:var(--gray-bg)}.pastor-note-home-inner{max-width:760px;margin:auto;background:#fff;border:1px solid var(--gray-border);border-radius:8px;padding:clamp(28px,5vw,52px)}.pastor-note-home h2{font-size:clamp(1.7rem,4vw,2.5rem);margin:10px 0 18px}.pastor-note-home p,.pastor-note-body{color:var(--gray-dark);line-height:1.8}.pastor-note-date{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.pastor-note-author{margin:16px 0 24px;font-weight:700;color:#111!important}.pastor-note-link{display:inline-block;padding:12px 18px;border:1px solid #111;border-radius:4px;color:#111;text-decoration:none}.pastor-notes-page{padding:56px 24px 80px;background:var(--gray-bg)}.pastor-notes-list{max-width:860px;margin:auto;display:flex;flex-direction:column;gap:24px}.pastor-note-card{padding:clamp(26px,5vw,48px);background:#fff;border:1px solid var(--gray-border);border-radius:8px}`;
+function latest(n){if(!n)return'';let h=md(n.body),x=plain(h);return `<section class="pastor-note-home"><div class="pastor-note-home-inner"><span class="about-label">Pastor Notes</span><p class="pastor-note-date">${esc(label(n.date))}</p><h2>${esc(n.title)}</h2><p>${esc(x.slice(0,360))}${x.length>360?'…':''}</p><p class="pastor-note-author">— ${esc(n.author||'Pastor')}</p><a class="pastor-note-link" href="pastor-notes.html">Read Pastor Notes</a></div></section>`}
+function page(base,title,desc,main){return enhance(base.replaceAll('About Us | Dale Baptist Church',`${title} | Dale Baptist Church`).replaceAll('Learn what Dale Baptist Church believes, why we exist, and how we seek to follow Jesus and serve others in Dale, Oklahoma.',desc).replace(/<main id="main-content">[\s\S]*?<\/main>/,main))}
+function notesPage(base,notes){let cards=notes.map(n=>`<article class="pastor-note-card"><p class="pastor-note-date">${esc(label(n.date))}</p><h2>${esc(n.title)}</h2><div class="pastor-note-body">${md(n.body)}</div><p class="pastor-note-author">— ${esc(n.author||'Pastor')}</p></article>`).join('');return page(base,'Pastor Notes','Read Pastor Notes from Dale Baptist Church.',`<main id="main-content"><div class="about-page-hero"><div class="about-hero-inner"><span class="about-hero-eyebrow">Dale Baptist Church — Dale, Oklahoma</span><h1 class="about-hero-h1">Pastor Notes</h1><p class="about-hero-verse">Encouragement, updates, and reflections from our pastor.</p></div></div><section class="pastor-notes-page"><div class="pastor-notes-list">${cards}</div></section></main>`).replace('</style>',noteCss+'</style>')}
+function nested(h){return h.replaceAll('href="index.html#events"','href="../index.html#events"').replaceAll('href="index.html"','href="../index.html"').replaceAll('href="about.html"','href="../about.html"').replaceAll('href="sermons.html"','href="../sermons.html"').replaceAll('href="ministries.html"','href="../ministries.html"').replaceAll('href="events.html"','href="../events.html"').replaceAll('href="connect.html"','href="../connect.html"').replaceAll('href="images/','href="../images/').replaceAll('src="images/','src="../images/')}
+function storyCard(s){return `<article class="story-card"><img loading="lazy" src="${esc(s.image)}" alt="${esc(s.title)}"><div class="story-card-body"><span class="about-label">${esc(s.category||'Church Family')}</span><h2>${esc(s.title)}</h2><p>${esc(s.description)}</p><a class="content-button" href="stories/${slug(s.source)}.html">Read the Story</a></div></article>`}
+function storyPage(base,s){let id=(s.video_url||'').match(/[?&]v=([^&]+)/)?.[1],stat=s.stat_value?`<div class="stat-callout"><span class="stat-value">${esc(s.stat_value)}</span><span>${esc(s.stat_label)}</span></div>`:'',video=id?`<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${esc(id)}" title="${esc(s.title)} highlight video" allowfullscreen loading="lazy"></iframe></div>`:'';return nested(page(base,s.title,s.description,`<main id="main-content"><div class="about-page-hero"><div class="about-hero-inner"><span class="about-hero-eyebrow">Our Stories · ${esc(s.category||'Church Family')}</span><h1 class="about-hero-h1">${esc(s.title)}</h1><p class="about-hero-verse">${esc(label(s.date))}</p></div></div><article class="content-shell"><img class="content-hero" src="${esc(s.image)}" alt="Dale Baptist Church group at Falls Creek 2026"><div class="content-copy">${stat}${md(s.body)}${video}</div></article></main>`))}
+function emphasisPage(base,e){let gallery=(e.gallery||[]).map(g=>`<img loading="lazy" src="${esc(g.image)}" alt="${esc(g.alt)}">`).join('');return nested(page(base,e.title,e.description,`<main id="main-content"><div class="about-page-hero"><div class="about-hero-inner"><span class="about-hero-eyebrow">Church Emphasis</span><h1 class="about-hero-h1">${esc(e.title)}</h1><p class="about-hero-verse">${esc(e.description)}</p></div></div><article class="content-shell"><img class="content-hero" src="${esc(e.image)}" alt="${esc(e.title)}"><div class="content-copy">${md(e.body)}<div class="action-row"><a class="content-button" href="${esc(e.giving_url)}" target="_blank" rel="noopener noreferrer">Contribute Through Zeffy</a><a class="content-button" href="../connect.html">Share a Building Need</a></div><div class="gallery-grid">${gallery}</div></div></article></main>`))}
+function pollPage(base){let choices=[['barbecue','Barbecue','Pulled pork and smoked chicken'],['italian','Italian','Chicken Alfredo and lasagna'],['soups_sandwiches','Soups & Sandwiches','A variety of both']],fields=choices.map(x=>`<div class="rank-row"><label for="${x[0]}">${x[1]} <small>— ${x[2]}</small></label><select id="${x[0]}" name="${x[0]}_rank" required><option value="">Choose a rank</option><option value="1">1 — Top choice</option><option value="2">2 — Second choice</option><option value="3">3 — Last choice</option></select></div>`).join('');let main=`<main id="main-content"><div class="about-page-hero"><div class="about-hero-inner"><span class="about-hero-eyebrow">Church Family</span><h1 class="about-hero-h1">Thanksgiving Menu Poll</h1><p class="about-hero-verse">Rank all three choices: 1 is your favorite and 3 is your last choice.</p></div></div><section class="content-shell"><img class="content-hero" src="images/thanksgiving-poll-2026.webp" alt="Two turkeys wondering what is being planned for dinner"><form class="poll-card" name="thanksgiving-menu-2026" method="POST" data-netlify="true" action="/thanksgiving-vote-thanks.html" id="thanksgivingPoll"><input type="hidden" name="form-name" value="thanksgiving-menu-2026"><div class="form-message" id="rankError" role="alert">Please give each menu a different rank.</div>${fields}<button class="content-button" type="submit">Submit My Vote</button><p style="margin-top:20px;color:var(--gray-dark);font-size:.82rem;line-height:1.6">Voting is anonymous and closes October 4, 2026. Please submit one ballot per person. Because no identifying information is collected, repeat voting cannot be completely prevented.</p></form><div class="poll-card" id="pollClosed" hidden><h2>Voting Has Ended</h2><p>Thanks for your interest! We will announce the winning menu Sunday, October 11, 2026.</p></div></section></main>`;let h=page(base,'Thanksgiving Menu Poll','Rank your choices for Dale Baptist Church’s 2026 non-traditional Thanksgiving meal.',main);return h.replace('</body>',`<script>(function(){var f=document.getElementById('thanksgivingPoll'),c=document.getElementById('pollClosed');if(new Date()>=new Date('2026-10-05T00:00:00')){f.hidden=true;c.hidden=false;return}f.addEventListener('submit',function(e){var v=[...f.querySelectorAll('select')].map(x=>x.value);if(new Set(v).size!==3){e.preventDefault();document.getElementById('rankError').style.display='block';return}localStorage.setItem('dbc-thanksgiving-voted','yes')});if(localStorage.getItem('dbc-thanksgiving-voted')==='yes'){var p=document.createElement('p');p.textContent='This browser has already submitted a vote.';f.appendChild(p)}})();</script></body>`)}
+fs.rmSync(OUT,{recursive:true,force:true});fs.mkdirSync(OUT,{recursive:true});
+let notes=entries('content/pastor-notes').filter(x=>x.draft!==true).sort((a,b)=>iso(b.date).localeCompare(iso(a.date))),events=entries('content/events').filter(x=>x.draft!==true).sort((a,b)=>iso(a.event_date).localeCompare(iso(b.event_date))),emphases=entries('content/emphases').filter(x=>x.draft!==true),stories=entries('content/stories').filter(x=>x.draft!==true).sort((a,b)=>iso(b.date).localeCompare(iso(a.date)));
+for(let file of FILES){let h=fs.readFileSync(path.join(ROOT,file),'utf8');if(file==='index.html'){h=h.replace('</style>',noteCss+'</style>');h=region(h,'FEATURED-EVENTS',[...events.filter(x=>x.featured).map(eventSlide),...emphases.filter(x=>x.featured).map(emphasisSlide)].join('\n'));h=region(h,'PASTOR-NOTE',latest(notes[0]))}if(file==='events.html')h=region(h,'EVENT-LIST',events.map(eventCard).join('\n'));fs.writeFileSync(path.join(OUT,file),enhance(h))}
+for(let p of COPIES)fs.cpSync(path.join(ROOT,p),path.join(OUT,p),{recursive:true});
+let about=fs.readFileSync(path.join(ROOT,'about.html'),'utf8');fs.writeFileSync(path.join(OUT,'pastor-notes.html'),notesPage(about,notes));
+fs.writeFileSync(path.join(OUT,'our-stories.html'),page(about,'Our Stories','Celebrate what God is doing in and through the Dale Baptist Church family.',`<main id="main-content"><div class="about-page-hero"><div class="about-hero-inner"><span class="about-hero-eyebrow">Celebrating What God Is Doing</span><h1 class="about-hero-h1">Our Stories</h1><p class="about-hero-verse">Stories of God’s faithfulness in and through our church family.</p></div></div><section class="content-shell"><div class="story-grid">${stories.map(storyCard).join('')}</div></section></main>`));
+fs.mkdirSync(path.join(OUT,'stories'),{recursive:true});for(let s of stories)fs.writeFileSync(path.join(OUT,'stories',`${slug(s.source)}.html`),storyPage(about,s));
+fs.mkdirSync(path.join(OUT,'emphases'),{recursive:true});for(let e of emphases)fs.writeFileSync(path.join(OUT,'emphases',`${slug(e.source)}.html`),emphasisPage(about,e));
+fs.writeFileSync(path.join(OUT,'thanksgiving-poll.html'),pollPage(about));fs.writeFileSync(path.join(OUT,'thanksgiving-vote-thanks.html'),page(about,'Thanks for Voting','Your Thanksgiving menu vote has been recorded.',`<main id="main-content"><div class="about-page-hero"><div class="about-hero-inner"><span class="about-hero-eyebrow">Vote Recorded</span><h1 class="about-hero-h1">Thanks for Voting!</h1><p class="about-hero-verse">We will announce the winner Sunday, October 11, 2026!</p><a class="content-button" href="events.html">Return to Events</a></div></div></main>`));
+console.log(`Build complete: ${notes.length} notes, ${events.length} events, ${emphases.length} emphases, ${stories.length} stories.`);

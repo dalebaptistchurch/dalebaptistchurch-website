@@ -2,7 +2,7 @@
 title: 5th Sunday Cookout!
 event_date: 2026-08-30
 announcement_date: 2026-08-26
-expiration_date: 2026-08-30
+expiration_date: 2026-08-31
 category: All Church
 description: Like all good Baptists, on 5th Sundays, we eat! Join us for an old
   fashioned cookout right after church!
