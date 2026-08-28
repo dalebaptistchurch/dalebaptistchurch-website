@@ -897,8 +897,8 @@
       if (today < starts) { slide.remove(); return; }
     }
     if (expiresValue) {
-      var expires = new Date(expiresValue + 'T23:59:59');
-      if (today > expires) slide.remove();
+      var expires = new Date(expiresValue + 'T00:00:00');
+      if (today >= expires) slide.remove();
     }
   });
 
@@ -906,6 +906,19 @@
   if (slides.length === 0) {
     track.closest('.carousel-section').style.display = 'none';
     return;
+  }
+
+  // Add copies of the opening slides after the final slide. On wider screens,
+  // these fill the remaining card positions so the carousel ends with live
+  // content instead of empty columns before it loops back to the beginning.
+  var fillerCount = Math.min(2, slides.length);
+  for (var fillerIndex = 0; fillerIndex < fillerCount; fillerIndex++) {
+    var filler = slides[fillerIndex].cloneNode(true);
+    filler.setAttribute('aria-hidden', 'true');
+    filler.querySelectorAll('a,button,input,select,textarea').forEach(function(control) {
+      control.setAttribute('tabindex', '-1');
+    });
+    track.appendChild(filler);
   }
 
   var current = 0;

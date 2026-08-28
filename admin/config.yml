@@ -136,6 +136,20 @@ collections:
       - { label: YouTube Video Link, name: video_url, widget: string, required: false }
       - { label: Highlight Number, name: stat_value, widget: string, required: false, hint: "Example: 10" }
       - { label: Highlight Label, name: stat_label, widget: string, required: false, hint: "Example: Professions of Faith" }
+      - label: Photo Gallery
+        name: gallery
+        widget: list
+        required: false
+        fields:
+          - { label: Image, name: image, widget: image }
+          - { label: Image Description, name: alt, widget: string }
+      - label: Uploaded Videos
+        name: videos
+        widget: list
+        required: false
+        fields:
+          - { label: Video Title, name: title, widget: string }
+          - { label: Video File, name: file, widget: file }
       - { label: Feature, name: featured, widget: boolean, default: false, required: false }
       - { label: Draft, name: draft, widget: boolean, default: false, required: false }
       - { label: Story, name: body, widget: richtext }
