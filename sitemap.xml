@@ -34,7 +34,19 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://www.dalebaptistchurch.org/volleyball.html</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://www.dalebaptistchurch.org/stories/falls-creek.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.dalebaptistchurch.org/stories/womens-retreat.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.dalebaptistchurch.org/stories/vacation-bible-school.html</loc>
     <changefreq>yearly</changefreq>
   </url>
 </urlset>
