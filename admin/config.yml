@@ -153,3 +153,72 @@ collections:
       - { label: Feature, name: featured, widget: boolean, default: false, required: false }
       - { label: Draft, name: draft, widget: boolean, default: false, required: false }
       - { label: Story, name: body, widget: richtext }
+
+  - name: volleyball_weeks
+    label: Volleyball Season 4
+    label_singular: Volleyball Week
+    folder: content/volleyball
+    create: false
+    delete: false
+    summary: "{{date}} — {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Week Title, name: title, widget: string }
+      - label: Date
+        name: date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+      - label: Week Type
+        name: week_type
+        widget: select
+        options: [Regular Season, Off Week, Tournament]
+        default: Regular Season
+      - label: Schedule Note
+        name: note
+        widget: text
+        required: false
+        hint: "Optional note shown with this week's schedule."
+      - label: Games
+        name: games
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.time}} — {{fields.home}} vs. {{fields.away}}"
+        fields:
+          - { label: Time, name: time, widget: string }
+          - { label: Court, name: court, widget: string }
+          - { label: First Team, name: home, widget: string }
+          - { label: Second Team, name: away, widget: string }
+          - label: First Team Score
+            name: home_score
+            widget: number
+            value_type: int
+            min: 0
+            required: false
+          - label: Second Team Score
+            name: away_score
+            widget: number
+            value_type: int
+            min: 0
+            required: false
+          - label: Count in Regular-Season Standings
+            name: count_in_standings
+            widget: boolean
+            default: true
+            required: false
+      - label: Weekly Recap
+        name: recap
+        widget: richtext
+        required: false
+        hint: "Optional short recap to display with this week's photos."
+      - label: Action Photos
+        name: photos
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.caption}}"
+        fields:
+          - { label: Photo, name: image, widget: image }
+          - { label: Photo Description, name: alt, widget: string, hint: "Describe what is happening for visitors using a screen reader." }
+          - { label: Caption, name: caption, widget: string, required: false }
