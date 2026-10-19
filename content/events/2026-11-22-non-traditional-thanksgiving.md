@@ -1,14 +1,15 @@
 ---
-title: "Non-Traditional Thanksgiving Lunch"
+title: Non-Traditional Thanksgiving Lunch
 event_date: 2026-11-22
 announcement_date: 2026-08-26
 expiration_date: 2026-11-23
 category: Church Family
-description: "Skip the turkey — we do Thanksgiving our own way! Join the church family for our annual non-traditional Thanksgiving lunch. Everyone is welcome."
-details: "Time to be announced · Bring a dish to share"
-image: /images/thanksgiving-poll-2026.webp
+description: Skip the turkey — we do Thanksgiving our own way! Join the church
+  family for our annual non-traditional Thanksgiving lunch. Everyone is welcome.
+details: "Chicken Alfredo and Lasagna provided by church. Look for signup "
+image: /images/uploads/thanksgiving-lunch-turkey-announcement.png
 featured: true
 draft: false
-action_url: /thanksgiving-poll.html
-action_label: "Vote for This Year's Menu"
+action_url: ""
+action_label: ""
 ---
