@@ -39,7 +39,8 @@
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 20px;
   }
-  .nav-logo img { height: 50px; width: auto; display: block; }
+  .nav-logo { width: 140px; height: 52px; overflow: hidden; position: relative; display: block; flex: 0 0 auto; }
+  .nav-logo img { position: absolute; width: 167px; height: 167px; max-width: none; left: -13px; top: -57px; display: block; }
   .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
   .nav-links a {
     text-decoration: none; color: var(--gray-dark);
@@ -118,7 +119,6 @@
   }
   @media (min-width: 769px) {
     nav { padding: 0 48px; height: 68px; }
-    .nav-logo img { height: 52px; }
   }
 
   /* ── HERO ── */
@@ -650,7 +650,7 @@
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <img src="images/dbc-logo.png" alt="Dale Baptist Church" />
+    <img src="images/dbc-logo-192.png" alt="Dale Baptist Church" />
   </a>
   <ul class="nav-links">
     <li><a href="about.html">About</a></li>

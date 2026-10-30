@@ -4,7 +4,7 @@ backend:
 
 site_url: https://www.dalebaptistchurch.org
 display_url: https://www.dalebaptistchurch.org
-logo_url: /images/dbc-logo.png
+logo_url: /images/dbc-logo-192.png
 
 media_folder: images/uploads
 public_folder: /images/uploads
