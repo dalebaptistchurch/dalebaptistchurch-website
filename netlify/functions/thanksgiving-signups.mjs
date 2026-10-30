@@ -40,11 +40,11 @@ export default async (request, context) => {
   try {
     if (request.method === "GET") {
       const rows = await allSignups(store);
-      return json({ signups: rows, admin: Boolean(adminUser(context)) });
+      return json({ signups: rows, admin: Boolean(await adminUser(request, context)) });
     }
 
     if (request.method === "DELETE") {
-      if (!adminUser(context)) return unauthorized();
+      if (!await adminUser(request, context)) return unauthorized();
       const name = clean(new URL(request.url).searchParams.get("name"), 80);
       if (!name) return json({ error: "Name required." }, 400);
       await store.delete(signupKey(name));

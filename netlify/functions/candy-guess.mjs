@@ -28,7 +28,7 @@ export default async (request, context) => {
     if (request.method === "GET") {
       const rows = await entries(store);
       if (url.searchParams.get("admin") === "1") {
-        if (!adminUser(context)) return unauthorized();
+        if (!await adminUser(request, context)) return unauthorized();
         return json({ ...publicState(rows), entries: rows });
       }
       return json(publicState(rows));
@@ -46,7 +46,7 @@ export default async (request, context) => {
       return json({ ok: true, entry: { name, guess }, state: publicState(await entries(store)) });
     }
     if (request.method === "DELETE") {
-      if (!adminUser(context)) return unauthorized();
+      if (!await adminUser(request, context)) return unauthorized();
       const id = clean(new URL(request.url).searchParams.get("id"), 80);
       if (!id) return json({ error: "Entry ID required." }, 400);
       await store.delete(`entry-${id}`);

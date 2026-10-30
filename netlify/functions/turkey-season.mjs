@@ -37,7 +37,7 @@ export default async (request, context) => {
       return json({ registrationOpen: Date.now() < REGISTRATION_CLOSE, ended: Boolean(s.endedAt), turkeyCount: Object.values(s.turkeys).filter(x => x.active).length });
     }
     if (request.method === "GET" && action === "admin") {
-      if (!adminUser(context)) return unauthorized();
+      if (!await adminUser(request, context)) return unauthorized();
       return json({ state: await state(store), players: (await players(store)).map(p => ({ ...publicPlayer(p), createdAt: p.createdAt })), history: await history(store) });
     }
     const body = request.method === "POST" ? await request.json() : {};
@@ -80,7 +80,7 @@ export default async (request, context) => {
       return json({ ok: true, message: `Turkey #${number} is now registered to ${player.name}.` });
     }
     if (request.method === "POST" && action === "admin") {
-      if (!adminUser(context)) return unauthorized();
+      if (!await adminUser(request, context)) return unauthorized();
       const s = await state(store), list = await players(store), command = clean(body.command, 30), id = clean(body.playerId, 40), player = list.find(p => p.id === id), number = Number(body.turkey);
       if (command === "approve" && player) player.approved = true;
       else if (command === "suspend" && player) { player.suspendedUntil = new Date(Date.now() + 3 * 86400000).toISOString(); Object.values(s.turkeys).forEach(t => { if (t.holderId === player.id) t.holderId = null; }); }
