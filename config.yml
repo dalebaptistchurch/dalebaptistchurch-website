@@ -1,0 +1,224 @@
+backend:
+  name: git-gateway
+  branch: main
+
+site_url: https://www.dalebaptistchurch.org
+display_url: https://www.dalebaptistchurch.org
+logo_url: /images/dbc-logo.png
+
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: pastor_notes
+    label: Pastor Notes
+    label_singular: Pastor Note
+    folder: content/pastor-notes
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date}} — {{title}}{{draft}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: Author, name: author, widget: string, default: Pastor }
+      - label: Draft
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: "Turn this on to keep the note off every public page."
+      - { label: Note, name: body, widget: richtext }
+
+  - name: events
+    label: Events
+    label_singular: Event
+    folder: content/events
+    create: true
+    delete: true
+    slug: "{{event_date}}-{{slug}}"
+    summary: "{{event_date}} — {{title}}{{draft}}"
+    sortable_fields: [event_date, title]
+    fields:
+      - { label: Event Name, name: title, widget: string }
+      - label: Event Date
+        name: event_date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+      - label: Announcement Date
+        name: announcement_date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: false
+        hint: "Leave blank to display immediately. A future date keeps it hidden until that day."
+      - label: Expiration Date
+        name: expiration_date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: false
+        hint: "Leave blank to remove the event automatically the day after its event date."
+      - label: Audience
+        name: category
+        widget: select
+        options: [All Church, Church Family, Youth, Children, Men, Women, Community]
+        default: All Church
+      - { label: Description, name: description, widget: text }
+      - label: Additional Details
+        name: details
+        widget: string
+        required: false
+        hint: "Example: Time to be announced · Bring a dish to share"
+      - label: Image
+        name: image
+        widget: image
+        required: false
+        hint: "If blank, the church exterior image will be used."
+      - label: Feature on Homepage
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+      - label: Draft
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: "Turn this on to keep the event off every public page."
+      - { label: Button Link, name: action_url, widget: string, required: false, hint: "Optional page or external link for an event button." }
+      - { label: Button Text, name: action_label, widget: string, required: false }
+
+  - name: emphases
+    label: Church Emphases
+    label_singular: Church Emphasis
+    folder: content/emphases
+    create: true
+    delete: true
+    slug: "{{year}}-{{slug}}"
+    summary: "{{title}} — through {{end_date}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Start Date, name: start_date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: End Date, name: end_date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: Category, name: category, widget: string, default: Church Emphasis }
+      - { label: Short Description, name: description, widget: text }
+      - { label: Main Image, name: image, widget: image }
+      - { label: Giving Link, name: giving_url, widget: string, required: false }
+      - label: Project Gallery
+        name: gallery
+        widget: list
+        required: false
+        fields:
+          - { label: Image, name: image, widget: image }
+          - { label: Image Description, name: alt, widget: string }
+      - { label: Feature on Homepage, name: featured, widget: boolean, default: true, required: false }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false }
+      - { label: Full Description, name: body, widget: richtext }
+
+  - name: stories
+    label: Our Stories
+    label_singular: Story
+    folder: content/stories
+    create: true
+    delete: true
+    slug: "{{year}}-{{slug}}"
+    summary: "{{date}} — {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: Ministry, name: category, widget: select, options: [Youth, Children, Men, Women, Church Family, Community] }
+      - { label: Short Description, name: description, widget: text }
+      - { label: Main Image, name: image, widget: image }
+      - { label: YouTube Video Link, name: video_url, widget: string, required: false }
+      - { label: Highlight Number, name: stat_value, widget: string, required: false, hint: "Example: 10" }
+      - { label: Highlight Label, name: stat_label, widget: string, required: false, hint: "Example: Professions of Faith" }
+      - label: Photo Gallery
+        name: gallery
+        widget: list
+        required: false
+        fields:
+          - { label: Image, name: image, widget: image }
+          - { label: Image Description, name: alt, widget: string }
+      - label: Uploaded Videos
+        name: videos
+        widget: list
+        required: false
+        fields:
+          - { label: Video Title, name: title, widget: string }
+          - { label: Video File, name: file, widget: file }
+      - { label: Feature, name: featured, widget: boolean, default: false, required: false }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false }
+      - { label: Story, name: body, widget: richtext }
+
+  - name: volleyball_weeks
+    label: Volleyball Season 4
+    label_singular: Volleyball Week
+    folder: content/volleyball
+    create: false
+    delete: false
+    summary: "{{date}} — {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Week Title, name: title, widget: string }
+      - label: Date
+        name: date
+        widget: datetime
+        time_format: false
+        format: "YYYY-MM-DD"
+      - label: Week Type
+        name: week_type
+        widget: select
+        options: [Regular Season, Off Week, Tournament]
+        default: Regular Season
+      - label: Schedule Note
+        name: note
+        widget: text
+        required: false
+        hint: "Optional note shown with this week's schedule."
+      - label: Games
+        name: games
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.time}} — {{fields.home}} vs. {{fields.away}}"
+        fields:
+          - { label: Time, name: time, widget: string }
+          - { label: Court, name: court, widget: string }
+          - { label: First Team, name: home, widget: string }
+          - { label: Second Team, name: away, widget: string }
+          - label: First Team Score
+            name: home_score
+            widget: number
+            value_type: int
+            min: 0
+            required: false
+          - label: Second Team Score
+            name: away_score
+            widget: number
+            value_type: int
+            min: 0
+            required: false
+          - label: Count in Regular-Season Standings
+            name: count_in_standings
+            widget: boolean
+            default: true
+            required: false
+      - label: Weekly Recap
+        name: recap
+        widget: richtext
+        required: false
+        hint: "Optional short recap to display with this week's photos."
+      - label: Action Photos
+        name: photos
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.caption}}"
+        fields:
+          - { label: Photo, name: image, widget: image }
+          - { label: Photo Description, name: alt, widget: string, hint: "Describe what is happening for visitors using a screen reader." }
+          - { label: Caption, name: caption, widget: string, required: false }
