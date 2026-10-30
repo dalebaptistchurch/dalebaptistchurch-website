@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { getStore } from "@netlify/blobs";
+import { adminUser, unauthorized } from "./_admin-auth.mjs";
 
 const STORE_NAME = "thanksgiving-2026-signups";
 const CATEGORIES = new Set(["Side Dish", "Dessert"]);
@@ -15,7 +16,7 @@ function json(data, status = 200) {
 }
 
 function clean(value, maximum) {
-  return String(value ?? "").trim().replace(/\s+/g, " ").slice(0, maximum);
+  return String(value ?? "").replace(/[<>&"']/g, "").trim().replace(/\s+/g, " ").slice(0, maximum);
 }
 
 function signupKey(name) {
@@ -33,12 +34,21 @@ async function allSignups(store) {
     .sort((a, b) => a.category.localeCompare(b.category) || a.item.localeCompare(b.item) || a.name.localeCompare(b.name));
 }
 
-export default async (request) => {
+export default async (request, context) => {
   const store = getStore({ name: STORE_NAME, consistency: "strong" });
 
   try {
     if (request.method === "GET") {
-      return json({ signups: await allSignups(store) });
+      const rows = await allSignups(store);
+      return json({ signups: rows, admin: Boolean(adminUser(context)) });
+    }
+
+    if (request.method === "DELETE") {
+      if (!adminUser(context)) return unauthorized();
+      const name = clean(new URL(request.url).searchParams.get("name"), 80);
+      if (!name) return json({ error: "Name required." }, 400);
+      await store.delete(signupKey(name));
+      return json({ ok: true, signups: await allSignups(store) });
     }
 
     if (request.method !== "POST") {
