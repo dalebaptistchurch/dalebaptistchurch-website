@@ -615,8 +615,10 @@
     gap: 40px;
   }
   @media (min-width: 860px) {
-    .contact-grid { grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .contact-grid { grid-template-columns: minmax(280px, .78fr) minmax(420px, 1.22fr); gap: 72px; align-items: start; }
   }
+
+  .contact-forms { display: grid; gap: 24px; }
 
   /* Info column */
   .contact-info-heading {
@@ -632,23 +634,21 @@
   /* Info items list */
   .info-list {
     display: flex; flex-direction: column;
-    border: 1px solid var(--gray-border);
-    border-radius: 8px; overflow: hidden;
+    border-top: 1px solid var(--gray-border);
     margin-bottom: 24px;
   }
   .info-item {
     display: flex; align-items: flex-start; gap: 14px;
-    padding: 16px 20px;
-    background: var(--white);
+    padding: 18px 0;
+    background: transparent;
     border-bottom: 1px solid var(--gray-border);
   }
   .info-item:last-child { border-bottom: none; }
   .info-icon {
-    width: 36px; height: 36px; flex-shrink: 0;
-    background: var(--black); border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.85rem; color: var(--white);
-    font-weight: 700;
+    width: 30px; flex-shrink: 0;
+    font-size: 0.58rem; color: var(--gray-light);
+    font-weight: 800; letter-spacing: .08em;
+    padding-top: 3px;
   }
   .info-text strong {
     display: block; font-size: 0.62rem; font-weight: 700;
@@ -686,9 +686,19 @@
   .form-card {
     background: var(--white);
     border: 1px solid var(--gray-border);
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 32px 28px;
   }
+  .form-card.text-card {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+  .form-card.text-card h3 { color: var(--white); }
+  .form-card.text-card > p { color: rgba(255,255,255,.65); }
+  .form-card.text-card .form-group label { color: rgba(255,255,255,.72); }
+  .form-card.text-card .consent-copy { color: rgba(255,255,255,.68); font-size: .78rem; }
+  .form-card.text-card .btn-primary { background: var(--white); color: var(--black); }
   .form-card h3 {
     font-size: 1rem; font-weight: 800;
     color: var(--black); letter-spacing: -0.01em;
@@ -886,35 +896,35 @@
 
       <div class="info-list">
         <div class="info-item">
-          <div class="info-icon">📍</div>
+          <div class="info-icon">01</div>
           <div class="info-text">
             <strong>Address</strong>
             <span>300 2nd Ave, Dale, OK 74851</span>
           </div>
         </div>
         <div class="info-item">
-          <div class="info-icon">📞</div>
+          <div class="info-icon">02</div>
           <div class="info-text">
             <strong>Phone</strong>
             <a href="tel:4059198287">405-919-8287</a>
           </div>
         </div>
         <div class="info-item">
-          <div class="info-icon">✉️</div>
+          <div class="info-icon">03</div>
           <div class="info-text">
             <strong>Email</strong>
             <a href="mailto:dalebaptistchurch@gmail.com">dalebaptistchurch@gmail.com</a>
           </div>
         </div>
         <div class="info-item">
-          <div class="info-icon">💝</div>
+          <div class="info-icon">04</div>
           <div class="info-text">
             <strong>Give Online</strong>
             <a href="https://www.zeffy.com/en-US/donation-form/tithing-5" target="_blank" rel="noopener noreferrer">Give via Zeffy →</a>
           </div>
         </div>
         <div class="info-item">
-          <div class="info-icon">f</div>
+          <div class="info-icon">05</div>
           <div class="info-text">
             <strong>Facebook</strong>
             <a href="https://www.facebook.com/groups/2354953164804602/" target="_blank" rel="noopener noreferrer" aria-label="Dale Baptist Church on Facebook">
@@ -923,7 +933,7 @@
           </div>
         </div>
         <div class="info-item">
-          <div class="info-icon" style="font-size:0.7rem;">IG</div>
+          <div class="info-icon">06</div>
           <div class="info-text">
             <strong>Instagram</strong>
             <a href="https://www.instagram.com/daleyouthgroup" target="_blank" rel="noopener noreferrer" aria-label="Dale Youth Group on Instagram">
@@ -937,6 +947,20 @@
         <p>"Bear one another's burdens, and so fulfill the law of Christ."</p>
         <cite>Galatians 6:2 ESV</cite>
       </div>
+    </div>
+
+    <div class="contact-forms">
+    <div class="form-card text-card">
+      <h3>Church Text Updates</h3>
+      <p>Receive occasional texts about services, events, schedule changes, and important church updates.</p>
+      <form name="church-text-updates" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
+        <input type="hidden" name="form-name" value="church-text-updates" />
+        <p hidden><label>Leave this field blank: <input name="bot-field" /></label></p>
+        <div class="form-group"><label for="text-name">Name</label><input id="text-name" name="name" type="text" autocomplete="name" required /></div>
+        <div class="form-group"><label for="text-phone">Mobile Number</label><input id="text-phone" name="phone" type="tel" autocomplete="tel" required /></div>
+        <label class="consent-copy" style="display:flex;align-items:flex-start;gap:10px;line-height:1.5;margin:18px 0;"><input name="consent" type="checkbox" value="yes" required style="width:auto;margin-top:5px;" /><span>I agree to receive text messages from Dale Baptist Church. Message frequency varies. Message and data rates may apply. Reply STOP to opt out.</span></label>
+        <button class="btn-primary" type="submit">Sign Up for Text Updates</button>
+      </form>
     </div>
 
     <!-- RIGHT: Contact form -->
@@ -990,6 +1014,7 @@
         <button type="submit" class="btn-primary">Send Message</button>
         <p class="form-note">We typically respond within 1–2 business days.</p>
       </form>
+    </div>
     </div>
 
   </div>
