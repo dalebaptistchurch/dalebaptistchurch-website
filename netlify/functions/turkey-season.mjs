@@ -82,9 +82,18 @@ export default async (request, context) => {
     if (request.method === "POST" && action === "admin") {
       if (!await adminUser(request, context)) return unauthorized();
       const s = await state(store), list = await players(store), command = clean(body.command, 30), id = clean(body.playerId, 40), player = list.find(p => p.id === id), number = Number(body.turkey);
+      let deleted = false;
       if (command === "approve" && player) player.approved = true;
       else if (command === "suspend" && player) { player.suspendedUntil = new Date(Date.now() + 3 * 86400000).toISOString(); Object.values(s.turkeys).forEach(t => { if (t.holderId === player.id) t.holderId = null; }); }
       else if (command === "disqualify" && player) { player.disqualified = true; Object.values(s.turkeys).forEach(t => { if (t.holderId === player.id) t.holderId = null; }); }
+      else if (command === "restore-player" && player) { player.suspendedUntil = null; player.disqualified = false; }
+      else if (command === "delete-player" && player) {
+        Object.values(s.turkeys).forEach(t => { if (t.holderId === player.id) t.holderId = null; });
+        Object.values(s.cooldowns || {}).forEach(cooldowns => { delete cooldowns[player.id]; });
+        if (s.finalHolders) Object.keys(s.finalHolders).forEach(turkey => { if (s.finalHolders[turkey] === player.id) s.finalHolders[turkey] = null; });
+        await store.delete(playerKey(player.id));
+        deleted = true;
+      }
       else if (command === "reset-pin" && player && /^\d{4}$/.test(clean(body.pin,4))) { const secured=hashPin(clean(body.pin,4)); player.pinSalt=secured.salt; player.pinHash=secured.hash; }
       else if (command === "remove-turkey" && s.turkeys[number]) { s.turkeys[number].active=false; s.turkeys[number].holderId=null; }
       else if (command === "restore-turkey" && s.turkeys[number]) s.turkeys[number].active=true;
@@ -92,7 +101,7 @@ export default async (request, context) => {
       else if (command === "end") { s.endedAt=new Date().toISOString(); s.finalHolders=Object.fromEntries(Object.entries(s.turkeys).map(([n,t])=>[n,t.holderId])); }
       else if (command === "confirm-winner" && s.endedAt && s.finalHolders?.[number]) { s.winners ||= {}; s.winners[number] = true; }
       else return json({ error: "Invalid administrative action." }, 400);
-      if (player) await store.setJSON(playerKey(player.id), player);
+      if (player && !deleted) await store.setJSON(playerKey(player.id), player);
       await store.setJSON("state", s); await record(store, { type: `admin-${command}`, playerId: player?.id || null, playerName: player?.name || null, turkey: Number.isInteger(number) ? number : null });
       return json({ ok: true });
     }
