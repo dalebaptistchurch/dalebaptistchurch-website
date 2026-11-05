@@ -79,6 +79,30 @@ export default async (request, context) => {
       await store.setJSON("state", s); await record(store, { type: "claimed", turkey: number, playerId: player.id, playerName: player.name, previousHolderId: previous });
       return json({ ok: true, message: `Turkey #${number} is now registered to ${player.name}.` });
     }
+    if (request.method === "POST" && action === "release") {
+      const name = clean(body.name, 80), pin = clean(body.pin, 4), number = Number(body.turkey);
+      if (!Number.isInteger(number) || number < 1 || number > 6) return json({ error: "Choose Turkey #1–6." }, 400);
+      const player = await findPlayer(store, name);
+      if (!player) return json({ error: "Name or PIN is incorrect." }, 401);
+      if (player.lockedUntil && Date.now() < Date.parse(player.lockedUntil)) return json({ error: "Too many incorrect attempts. Try again in ten minutes." }, 429);
+      if (!validPin(pin, player)) {
+        player.failedAttempts = (player.failedAttempts || 0) + 1;
+        if (player.failedAttempts >= 5) { player.failedAttempts = 0; player.lockedUntil = new Date(Date.now() + 10 * 60 * 1000).toISOString(); }
+        await store.setJSON(playerKey(player.id), player);
+        return json({ error: "Name or PIN is incorrect." }, 401);
+      }
+      if (player.failedAttempts || player.lockedUntil) { player.failedAttempts = 0; player.lockedUntil = null; await store.setJSON(playerKey(player.id), player); }
+      const s = await state(store);
+      if (s.endedAt) return json({ error: "Turkey Season has ended." }, 409);
+      if (!s.turkeys[number]?.active) return json({ error: "That turkey is no longer active." }, 409);
+      if (s.turkeys[number].holderId !== player.id) return json({ error: `Turkey #${number} is not currently registered to you.` }, 409);
+      s.turkeys[number].holderId = null;
+      s.cooldowns[number] ||= {};
+      s.cooldowns[number][player.id] = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+      await store.setJSON("state", s);
+      await record(store, { type: "released", turkey: number, playerId: player.id, playerName: player.name });
+      return json({ ok: true, message: `Turkey #${number} is now unclaimed. You may claim a different turkey.` });
+    }
     if (request.method === "POST" && action === "admin") {
       if (!await adminUser(request, context)) return unauthorized();
       const s = await state(store), list = await players(store), command = clean(body.command, 30), id = clean(body.playerId, 40), player = list.find(p => p.id === id), number = Number(body.turkey);
