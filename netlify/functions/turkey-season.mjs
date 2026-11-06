@@ -106,6 +106,16 @@ export default async (request, context) => {
     if (request.method === "POST" && action === "admin") {
       if (!await adminUser(request, context)) return unauthorized();
       const s = await state(store), list = await players(store), command = clean(body.command, 30), id = clean(body.playerId, 40), player = list.find(p => p.id === id), number = Number(body.turkey);
+      if (command === "add-player") {
+        const name = clean(body.name, 80), pin = clean(body.pin, 4);
+        if (!name || !/^\d{4}$/.test(pin)) return json({ error: "Enter the student's name and an exactly four-digit PIN." }, 400);
+        if (list.some(p => normalize(p.name) === normalize(name))) return json({ error: "That name is already registered." }, 409);
+        const newId = randomBytes(10).toString("hex"), secured = hashPin(pin);
+        const newPlayer = { id: newId, name, pinSalt: secured.salt, pinHash: secured.hash, approved: true, disqualified: false, suspendedUntil: null, failedAttempts: 0, lockedUntil: null, createdAt: new Date().toISOString() };
+        await store.setJSON(playerKey(newId), newPlayer);
+        await record(store, { type: "admin-add-player", playerId: newId, playerName: name });
+        return json({ ok: true, message: `${name} has been registered and approved.` });
+      }
       let deleted = false;
       if (command === "approve" && player) player.approved = true;
       else if (command === "suspend" && player) { player.suspendedUntil = new Date(Date.now() + 3 * 86400000).toISOString(); Object.values(s.turkeys).forEach(t => { if (t.holderId === player.id) t.holderId = null; }); }
