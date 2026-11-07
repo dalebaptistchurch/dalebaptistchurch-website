@@ -74,9 +74,10 @@ export default async (request, context) => {
       const cooldown = s.cooldowns?.[number]?.[player.id];
       if (cooldown && Date.now() < Date.parse(cooldown)) return json({ error: "That turkey is still off-limits to you for one hour." }, 409);
       const previous = s.turkeys[number].holderId;
+      const previousHolder = previous ? (await players(store)).find(p => p.id === previous) : null;
       s.turkeys[number].holderId = player.id;
       if (previous) { s.cooldowns[number] ||= {}; s.cooldowns[number][previous] = new Date(Date.now() + 60 * 60 * 1000).toISOString(); }
-      await store.setJSON("state", s); await record(store, { type: "claimed", turkey: number, playerId: player.id, playerName: player.name, previousHolderId: previous });
+      await store.setJSON("state", s); await record(store, { type: "claimed", turkey: number, playerId: player.id, playerName: player.name, previousHolderId: previous, previousHolderName: previousHolder?.name || null });
       return json({ ok: true, message: `Turkey #${number} is now registered to ${player.name}.` });
     }
     if (request.method === "POST" && action === "release") {
@@ -116,7 +117,7 @@ export default async (request, context) => {
         await record(store, { type: "admin-add-player", playerId: newId, playerName: name });
         return json({ ok: true, message: `${name} has been registered and approved.` });
       }
-      let deleted = false;
+      let deleted = false, previousHolderName = null;
       if (command === "approve" && player) player.approved = true;
       else if (command === "suspend" && player) { player.suspendedUntil = new Date(Date.now() + 3 * 86400000).toISOString(); Object.values(s.turkeys).forEach(t => { if (t.holderId === player.id) t.holderId = null; }); }
       else if (command === "disqualify" && player) { player.disqualified = true; Object.values(s.turkeys).forEach(t => { if (t.holderId === player.id) t.holderId = null; }); }
@@ -131,12 +132,12 @@ export default async (request, context) => {
       else if (command === "reset-pin" && player && /^\d{4}$/.test(clean(body.pin,4))) { const secured=hashPin(clean(body.pin,4)); player.pinSalt=secured.salt; player.pinHash=secured.hash; }
       else if (command === "remove-turkey" && s.turkeys[number]) { s.turkeys[number].active=false; s.turkeys[number].holderId=null; }
       else if (command === "restore-turkey" && s.turkeys[number]) s.turkeys[number].active=true;
-      else if (command === "assign" && s.turkeys[number] && player) { Object.values(s.turkeys).forEach(t => { if(t.holderId===player.id)t.holderId=null; }); s.turkeys[number].active=true; s.turkeys[number].holderId=player.id; }
+      else if (command === "assign" && s.turkeys[number] && player) { const previousId=s.turkeys[number].holderId; previousHolderName=list.find(p=>p.id===previousId)?.name||null; Object.values(s.turkeys).forEach(t => { if(t.holderId===player.id)t.holderId=null; }); s.turkeys[number].active=true; s.turkeys[number].holderId=player.id; }
       else if (command === "end") { s.endedAt=new Date().toISOString(); s.finalHolders=Object.fromEntries(Object.entries(s.turkeys).map(([n,t])=>[n,t.holderId])); }
       else if (command === "confirm-winner" && s.endedAt && s.finalHolders?.[number]) { s.winners ||= {}; s.winners[number] = true; }
       else return json({ error: "Invalid administrative action." }, 400);
       if (player && !deleted) await store.setJSON(playerKey(player.id), player);
-      await store.setJSON("state", s); await record(store, { type: `admin-${command}`, playerId: player?.id || null, playerName: player?.name || null, turkey: Number.isInteger(number) ? number : null });
+      await store.setJSON("state", s); await record(store, { type: `admin-${command}`, playerId: player?.id || null, playerName: player?.name || null, previousHolderName, turkey: Number.isInteger(number) ? number : null });
       return json({ ok: true });
     }
     return json({ error: "Method not allowed." }, 405);
